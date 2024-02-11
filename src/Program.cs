@@ -35,6 +35,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSignInMiddleware();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 await using var databaseSeederScope = app.Services.CreateAsyncScope();
