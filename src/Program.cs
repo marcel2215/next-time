@@ -17,6 +17,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(PolicyNames.Users, p => p.RequireRole(RoleNames.User, RoleNames.Admin))
     .AddPolicy(PolicyNames.Admins, p => p.RequireRole(RoleNames.Admin));
 
+builder.Services.AddManagers();
 builder.Services.AddDatabaseSeeder();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
