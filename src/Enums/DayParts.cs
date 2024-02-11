@@ -7,5 +7,6 @@ public enum DayParts
     Night = 1,
     Morning = 2,
     Afternoon = 4,
-    Evening = 8
+    Evening = 8,
+    All = Night | Morning | Afternoon | Evening
 }
