@@ -4,7 +4,7 @@ namespace NextTime.Entities;
 
 public sealed class ApplicationUser : IdentityUser<Guid>
 {
-    public ApplicationUser() { }
+    public ApplicationUser() : base() { }
 
     public ApplicationUser(string userName) : base(userName) { }
 
