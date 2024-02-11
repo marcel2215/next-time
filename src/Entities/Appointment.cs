@@ -37,5 +37,5 @@ public sealed class Appointment
 
     public TimeOnly? StartTime { get; set; }
 
-    public ICollection<Choice> Choices { get; init; } = [];
+    public ICollection<Choice> Choices { get; } = [];
 }

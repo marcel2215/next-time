@@ -24,5 +24,5 @@ public sealed class Choice
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
-    public ICollection<Availability> Availabilities { get; init; } = [];
+    public ICollection<Availability> Availabilities { get; } = [];
 }
