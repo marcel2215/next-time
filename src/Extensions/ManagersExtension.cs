@@ -7,7 +7,7 @@ public static class ManagersExtension
     public static IServiceCollection AddManagers(this IServiceCollection services)
     {
         services.AddScoped<ApplicationUserManager>();
-        services.AddScoped<AppointmentManager>();
+        services.AddScoped<MeetingManager>();
         services.AddScoped<ChoiceManager>();
         services.AddScoped<AvailabilityManager>();
 

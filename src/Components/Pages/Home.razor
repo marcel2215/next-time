@@ -1,13 +1,13 @@
 ﻿@page "/"
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ApplicationUserManager UserManager
-@inject AppointmentManager AppointmentManager
+@inject MeetingManager MeetingManager
 
 <PageTitle>NextTime</PageTitle>
 
 <div class="space-y-8">
     <h1 class="text-5xl sm:text-6xl text-center font-bold">Next<span class="text-amber-500">Time</span></h1>
-    @if (_appointments.Count == 0)
+    @if (_meetings.Count == 0)
     {
         <p class="text-center text-gray-500">You don't have any events.</p>
     }
@@ -15,13 +15,13 @@
 </div>
 
 @code {
-    private List<Appointment> _appointments = [];
+    private List<Meeting> _meetings = [];
 
     [CascadingParameter]
     public required ApplicationUser User { get; init; }
 
     protected override async Task OnInitializedAsync()
     {
-        _appointments = await AppointmentManager.Appointments.Where(a => a.OwnerId == User!.Id).ToListAsync();
+        _meetings = await MeetingManager.Meetings.Where(a => a.OwnerId == User!.Id).ToListAsync();
     }
 }

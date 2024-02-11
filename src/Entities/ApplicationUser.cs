@@ -9,7 +9,7 @@ public sealed class ApplicationUser : IdentityUser<Guid>
 
     public ApplicationUser(string userName) : base(userName) { }
 
-    public ICollection<Appointment> CreatedAppointments { get; } = [];
+    public ICollection<Meeting> CreatedMeetings { get; } = [];
 
     public ICollection<Choice> Choices { get; } = [];
 }

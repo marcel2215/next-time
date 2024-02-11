@@ -3,12 +3,12 @@ using NextTime.Enums;
 
 namespace NextTime.Entities;
 
-public sealed class Appointment
+public sealed class Meeting
 {
-    public Appointment() { }
+    public Meeting() { }
 
     [SetsRequiredMembers]
-    public Appointment(Guid ownerId, string title)
+    public Meeting(Guid ownerId, string title)
     {
         OwnerId = ownerId;
         Title = title;

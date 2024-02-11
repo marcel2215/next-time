@@ -6,7 +6,7 @@ namespace NextTime;
 
 public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
 {
-    public required DbSet<Appointment> Appointments { get; init; }
+    public required DbSet<Meeting> Meetings { get; init; }
 
     public required DbSet<Choice> Choices { get; init; }
 
@@ -16,9 +16,9 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     {
         base.OnModelCreating(modelBuilder);
         
-        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.CreatedAppointments).WithOne(a => a.Owner);
+        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.CreatedMeetings).WithOne(a => a.Owner);
         modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Choices).WithOne(c => c.User);
-        modelBuilder.Entity<Appointment>().HasMany(a => a.Choices).WithOne(c => c.Appointment);
+        modelBuilder.Entity<Meeting>().HasMany(a => a.Choices).WithOne(c => c.Meeting);
         modelBuilder.Entity<Choice>().HasMany(c => c.Availabilities).WithOne(a => a.Choice);
     }
 }
