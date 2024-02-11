@@ -5,6 +5,7 @@ using NextTime.Components;
 using NextTime.Constants;
 using NextTime.Entities;
 using NextTime.Extensions;
+using NextTime.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,4 +34,8 @@ app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+
+await using var scope = app.Services.CreateAsyncScope();
+await scope.ServiceProvider.GetRequiredService<DatabaseSeeder>().SeedAllAsync();
+
 app.Run();
