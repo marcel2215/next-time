@@ -8,12 +8,12 @@ public sealed class Availability
     public Availability() { }
 
     [SetsRequiredMembers]
-    public Availability(Guid choiceId, DateTimeOffset startTime, DateTimeOffset endTime, PartOfDay dayParts = PartOfDay.All)
+    public Availability(Guid choiceId, DateTimeOffset startTime, DateTimeOffset endTime, PartOfDay partOfDay = PartOfDay.All)
     {
         ChoiceId = choiceId;
         StartTime = startTime;
         EndTime = endTime;
-        DayParts = dayParts;
+        PartOfDay = partOfDay;
     }
 
     public Guid Id { get; init; } = Guid.NewGuid();
@@ -28,5 +28,5 @@ public sealed class Availability
 
     public required DateTimeOffset EndTime { get; set; }
 
-    public PartOfDay DayParts { get; set; } = PartOfDay.All;
+    public PartOfDay PartOfDay { get; set; } = PartOfDay.All;
 }
