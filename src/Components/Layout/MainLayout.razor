@@ -1,7 +1,21 @@
 ﻿@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ApplicationUserManager UserManager
 
 <main>
     <article>
-        @Body
+        <CascadingValue Value="_user">
+            @Body
+        </CascadingValue>
     </article>
 </main>
+
+@code {
+    private ApplicationUser? _user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        _user = await UserManager.GetAsync(state.User) ?? throw new Exception("Authentication failed.");
+    }
+}
