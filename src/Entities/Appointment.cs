@@ -33,7 +33,7 @@ public sealed class Appointment
 
     public PartOfDay PartOfDay { get; set; } = PartOfDay.All;
 
-    public TimeOnly? SuggestedTime { get; set; }
+    public TimeOnly? StartTime { get; set; }
 
     public ICollection<Choice> Choices { get; init; } = [];
 }
