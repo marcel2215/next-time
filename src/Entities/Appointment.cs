@@ -15,6 +15,10 @@ public sealed class Appointment
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
+    public required Guid OwnerId { get; init; }
+
+    public ApplicationUser? Owner { get; set; }
+
     public required string Title { get; set; }
 
     public string? Description { get; set; }
