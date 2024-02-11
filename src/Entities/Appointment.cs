@@ -8,8 +8,9 @@ public sealed class Appointment
     public Appointment() { }
 
     [SetsRequiredMembers]
-    public Appointment(string title)
+    public Appointment(Guid ownerId, string title)
     {
+        OwnerId = ownerId;
         Title = title;
     }
 
