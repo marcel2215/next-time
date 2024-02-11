@@ -29,9 +29,9 @@ public sealed class Appointment
 
     public DateTimeOffset NotAfter { get; set; } = DateTimeOffset.UtcNow.AddDays(30);
 
-    public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
-
     public PartOfDay PartOfDay { get; set; } = PartOfDay.All;
+
+    public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
 
     public TimeOnly? StartTime { get; set; }
 
