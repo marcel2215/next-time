@@ -16,7 +16,7 @@ public sealed class Choice
 
     public required Guid AppointmentId { get; init; }
 
-    public Appointment Appointment { get; init; } = default!;
+    public Appointment? Appointment { get; init; }
 
     public required Guid UserId { get; init; }
 
