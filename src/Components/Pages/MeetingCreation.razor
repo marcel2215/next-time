@@ -1,0 +1,18 @@
+@page "/create-meeting"
+
+<div>
+    <h1 class="text-4xl font-bold">Create Meeting</h1>
+</div>
+
+@code {
+    [CascadingParameter]
+    public required ApplicationUser User { get; init; }
+
+    public Meeting? Meeting { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Meeting = new Meeting(User.Id, "Unnamed");
+    }
+}
