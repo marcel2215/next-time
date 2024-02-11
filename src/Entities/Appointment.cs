@@ -27,4 +27,6 @@ public sealed class Appointment
     public DateTimeOffset StartTime { get; set; } = DateTimeOffset.UtcNow;
 
     public DateTimeOffset EndTime { get; set; } = DateTimeOffset.UtcNow.AddDays(30);
+
+    public ICollection<Choice> Choices { get; init; } = [];
 }
