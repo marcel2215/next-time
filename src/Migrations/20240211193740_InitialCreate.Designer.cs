@@ -11,7 +11,7 @@ using NextTime;
 namespace NextTime.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240211120503_InitialCreate")]
+    [Migration("20240211193740_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -211,7 +211,59 @@ namespace NextTime.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("NextTime.Entities.Appointment", b =>
+            modelBuilder.Entity("NextTime.Entities.Availability", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ChoiceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreationTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PartOfDay")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChoiceId");
+
+                    b.ToTable("Availabilities");
+                });
+
+            modelBuilder.Entity("NextTime.Entities.Choice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreationTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MeetingId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Choices");
+                });
+
+            modelBuilder.Entity("NextTime.Entities.Meeting", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -252,59 +304,7 @@ namespace NextTime.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Appointments");
-                });
-
-            modelBuilder.Entity("NextTime.Entities.Availability", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChoiceId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("CreationTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("EndTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("PartOfDay")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTimeOffset>("StartTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChoiceId");
-
-                    b.ToTable("Availabilities");
-                });
-
-            modelBuilder.Entity("NextTime.Entities.Choice", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("AppointmentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("CreationTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppointmentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Choices");
+                    b.ToTable("Meetings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -358,17 +358,6 @@ namespace NextTime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NextTime.Entities.Appointment", b =>
-                {
-                    b.HasOne("NextTime.Entities.ApplicationUser", "Owner")
-                        .WithMany("CreatedAppointments")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("NextTime.Entities.Availability", b =>
                 {
                     b.HasOne("NextTime.Entities.Choice", "Choice")
@@ -382,9 +371,9 @@ namespace NextTime.Migrations
 
             modelBuilder.Entity("NextTime.Entities.Choice", b =>
                 {
-                    b.HasOne("NextTime.Entities.Appointment", "Appointment")
+                    b.HasOne("NextTime.Entities.Meeting", "Meeting")
                         .WithMany("Choices")
-                        .HasForeignKey("AppointmentId")
+                        .HasForeignKey("MeetingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -394,26 +383,37 @@ namespace NextTime.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Appointment");
+                    b.Navigation("Meeting");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NextTime.Entities.Meeting", b =>
+                {
+                    b.HasOne("NextTime.Entities.ApplicationUser", "Owner")
+                        .WithMany("CreatedMeetings")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("NextTime.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Choices");
 
-                    b.Navigation("CreatedAppointments");
-                });
-
-            modelBuilder.Entity("NextTime.Entities.Appointment", b =>
-                {
-                    b.Navigation("Choices");
+                    b.Navigation("CreatedMeetings");
                 });
 
             modelBuilder.Entity("NextTime.Entities.Choice", b =>
                 {
                     b.Navigation("Availabilities");
+                });
+
+            modelBuilder.Entity("NextTime.Entities.Meeting", b =>
+                {
+                    b.Navigation("Choices");
                 });
 #pragma warning restore 612, 618
         }

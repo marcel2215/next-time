@@ -72,33 +72,6 @@ namespace NextTime.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Location = table.Column<string>(type: "TEXT", nullable: true),
-                    CreationTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    NotBefore = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    NotAfter = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    PartOfDay = table.Column<int>(type: "INTEGER", nullable: false),
-                    Duration = table.Column<TimeSpan>(type: "TEXT", nullable: false),
-                    StartTime = table.Column<TimeOnly>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Appointments_AspNetUsers_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -184,11 +157,38 @@ namespace NextTime.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Meetings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Location = table.Column<string>(type: "TEXT", nullable: true),
+                    CreationTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    NotBefore = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    NotAfter = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    PartOfDay = table.Column<int>(type: "INTEGER", nullable: false),
+                    Duration = table.Column<TimeSpan>(type: "TEXT", nullable: false),
+                    StartTime = table.Column<TimeOnly>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meetings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Meetings_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Choices",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AppointmentId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    MeetingId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreationTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
                 },
@@ -196,15 +196,15 @@ namespace NextTime.Migrations
                 {
                     table.PrimaryKey("PK_Choices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Choices_Appointments_AppointmentId",
-                        column: x => x.AppointmentId,
-                        principalTable: "Appointments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Choices_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Choices_Meetings_MeetingId",
+                        column: x => x.MeetingId,
+                        principalTable: "Meetings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -230,11 +230,6 @@ namespace NextTime.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Appointments_OwnerId",
-                table: "Appointments",
-                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -279,14 +274,19 @@ namespace NextTime.Migrations
                 column: "ChoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Choices_AppointmentId",
+                name: "IX_Choices_MeetingId",
                 table: "Choices",
-                column: "AppointmentId");
+                column: "MeetingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Choices_UserId",
                 table: "Choices",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Meetings_OwnerId",
+                table: "Meetings",
+                column: "OwnerId");
         }
 
         /// <inheritdoc />
@@ -317,7 +317,7 @@ namespace NextTime.Migrations
                 name: "Choices");
 
             migrationBuilder.DropTable(
-                name: "Appointments");
+                name: "Meetings");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
