@@ -4,6 +4,7 @@ using NextTime;
 using NextTime.Components;
 using NextTime.Constants;
 using NextTime.Entities;
+using NextTime.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(PolicyNames.Users, p => p.RequireRole(RoleNames.User, RoleNames.Admin))
     .AddPolicy(PolicyNames.Admins, p => p.RequireRole(RoleNames.Admin));
 
+builder.Services.AddDatabaseSeeder();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 var app = builder.Build();
