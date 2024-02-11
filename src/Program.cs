@@ -22,6 +22,12 @@ builder.Services.AddDatabaseSeeder();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddCascadingAuthenticationState();
 
+builder.Services.ConfigureApplicationCookie(o =>
+{
+    o.ExpireTimeSpan = TimeSpan.FromDays(36500);
+    o.SlidingExpiration = true;
+});
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
