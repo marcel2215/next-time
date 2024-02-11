@@ -1,7 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using NextTime;
 using NextTime.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 var app = builder.Build();
