@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using NextTime.Constants;
 using NextTime.Entities;
@@ -28,6 +29,11 @@ public sealed class ApplicationUserManager(ApplicationDbContext context, UserMan
             transaction.Rollback();
             throw;
         }
+    }
+
+    public async Task<ApplicationUser?> GetAsync(ClaimsPrincipal principal)
+    {
+        return await userManager.GetUserAsync(principal);
     }
 
     public async Task<ApplicationUser?> FindByIdAsync(Guid id)
