@@ -14,6 +14,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.CreatedAppointments).WithOne(a => a.Owner);
+        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Choices).WithOne(c => c.User);
         modelBuilder.Entity<Appointment>().HasMany(a => a.Choices).WithOne(c => c.Appointment);
         modelBuilder.Entity<Choice>().HasMany(c => c.Availabilities).WithOne(a => a.Choice);
     }
