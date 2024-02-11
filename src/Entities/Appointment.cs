@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using NextTime.Enums;
 
 namespace NextTime.Entities;
 
@@ -29,6 +30,10 @@ public sealed class Appointment
     public DateTimeOffset NotAfter { get; set; } = DateTimeOffset.UtcNow.AddDays(30);
 
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
+
+    public DayParts DayPart { get; set; } = DayParts.All;
+
+    public TimeOnly? SuggestedTime { get; set; }
 
     public ICollection<Choice> Choices { get; init; } = [];
 }
