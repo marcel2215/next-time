@@ -31,7 +31,7 @@ public sealed class Appointment
 
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
 
-    public DayParts DayPart { get; set; } = DayParts.All;
+    public PartOfDay DayPart { get; set; } = PartOfDay.All;
 
     public TimeOnly? SuggestedTime { get; set; }
 

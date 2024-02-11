@@ -1,7 +1,7 @@
 namespace NextTime.Enums;
 
 [Flags]
-public enum DayParts
+public enum PartOfDay
 {
     None = 0,
     Night = 1,
