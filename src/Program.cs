@@ -20,6 +20,7 @@ builder.Services.AddAuthorizationBuilder()
 builder.Services.AddManagers();
 builder.Services.AddDatabaseSeeder();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddCascadingAuthenticationState();
 
 var app = builder.Build();
 
