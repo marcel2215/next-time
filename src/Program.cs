@@ -35,7 +35,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
-await using var scope = app.Services.CreateAsyncScope();
-await scope.ServiceProvider.GetRequiredService<DatabaseSeeder>().SeedAllAsync();
+await using var databaseSeederScope = app.Services.CreateAsyncScope();
+await databaseSeederScope.ServiceProvider.GetRequiredService<DatabaseSeeder>().SeedAllAsync();
 
 app.Run();
