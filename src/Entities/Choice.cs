@@ -17,6 +17,8 @@ public sealed class Choice
 
     public required Guid AppointmentId { get; init; }
 
+    public Appointment Appointment { get; init; } = default!;
+
     public required string User { get; set; }
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
