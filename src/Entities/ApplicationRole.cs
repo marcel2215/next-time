@@ -4,7 +4,7 @@ namespace NextTime.Entities;
 
 public sealed class ApplicationRole : IdentityRole<Guid>
 {
-    public ApplicationRole() { }
+    public ApplicationRole() : base() { }
 
     public ApplicationRole(string name) : base(name) { }
 }
