@@ -14,7 +14,7 @@ public sealed class Appointment
         Location = location;
     }
 
-    public Guid Id { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     public required string Title { get; set; }
 
