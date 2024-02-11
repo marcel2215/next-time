@@ -22,4 +22,6 @@ public sealed class Choice
     public required string User { get; set; }
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
+
+    public ICollection<Availability> Availabilities { get; init; } = [];
 }
