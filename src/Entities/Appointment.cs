@@ -24,7 +24,7 @@ public sealed class Appointment
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
-    public DateTimeOffset StartTime { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset NotBefore { get; set; } = DateTimeOffset.UtcNow;
 
     public DateTimeOffset EndTime { get; set; } = DateTimeOffset.UtcNow.AddDays(30);
 
