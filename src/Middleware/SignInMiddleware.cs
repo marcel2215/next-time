@@ -18,5 +18,7 @@ public sealed class SignInMiddleware(RequestDelegate next)
 
         await userManager.CreateAsync(user);
         await signInManager.SignInAsync(user, true);
+
+        await next(context);
     }
 }
