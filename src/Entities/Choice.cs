@@ -7,9 +7,10 @@ public sealed class Choice
     public Choice() { }
 
     [SetsRequiredMembers]
-    public Choice(Guid appointmentId)
+    public Choice(Guid appointmentId, Guid userId)
     {
         AppointmentId = appointmentId;
+        UserId = userId;
     }
 
     public Guid Id { get; init; } = Guid.NewGuid();
