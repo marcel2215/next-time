@@ -1,7 +1,29 @@
 ﻿@page "/"
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ApplicationUserManager UserManager
+@inject AppointmentManager AppointmentManager
 
-<PageTitle>Home</PageTitle>
+<PageTitle>NextTime</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="flex bg-gray-100 min-h-screen min-w-screen justify-center items-center">
+    <div class="flex flex-col min-h-screen sm:min-h-0 sm:min-h-auto w-full sm:w-auto p-8 pt-24 sm:p-12 space-y-8 bg-white rounded-xl border shadow">
+        <h1 class="text-5xl sm:text-6xl text-center font-bold">Next<span class="text-amber-500">Time</span></h1>
+        @if (_appointments.Count == 0)
+        {
+            <p class="text-center text-gray-500">You don't have any events.</p>
+        }
+        <button class="p-2 rounded-lg bg-amber-500 text-black font-bold">Create Event</button>
+    </div>
+</div>
 
-Welcome to your new app.
+@code {
+    private List<Appointment> _appointments = [];
+
+    [CascadingParameter]
+    public required ApplicationUser User { get; init; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _appointments = await AppointmentManager.Appointments.Where(a => a.OwnerId == User!.Id).ToListAsync();
+    }
+}
