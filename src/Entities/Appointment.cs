@@ -8,11 +8,9 @@ public sealed class Appointment
     public Appointment() { }
 
     [SetsRequiredMembers]
-    public Appointment(string title, string? description = null, string? location = null)
+    public Appointment(string title)
     {
         Title = title;
-        Description = description;
-        Location = location;
     }
 
     public Guid Id { get; init; } = Guid.NewGuid();
