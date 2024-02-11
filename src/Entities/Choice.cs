@@ -18,6 +18,10 @@ public sealed class Choice
 
     public Appointment Appointment { get; init; } = default!;
 
+    public required Guid UserId { get; init; }
+
+    public ApplicationUser? User { get; set; }
+
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
     public ICollection<Availability> Availabilities { get; init; } = [];
