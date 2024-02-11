@@ -16,7 +16,7 @@ public sealed class Choice
 
     public required Guid AppointmentId { get; init; }
 
-    public Appointment? Appointment { get; init; }
+    public Appointment? Appointment { get; set; }
 
     public required Guid UserId { get; init; }
 

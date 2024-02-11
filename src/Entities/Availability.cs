@@ -20,7 +20,7 @@ public sealed class Availability
 
     public required Guid ChoiceId { get; init; }
 
-    public Choice? Choice { get; init; }
+    public Choice? Choice { get; set; }
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
