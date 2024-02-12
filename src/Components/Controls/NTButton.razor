@@ -10,17 +10,31 @@ else if (IsInProgress)
         <img src="/img/loading.gif" height="24" width="24">
     </button>
 }
-else if (Style == ButtonStyle.Accent)
+else if (IsSelected)
 {
-    <button class="w-full p-2 rounded-lg bg-amber-100 border-amber-200 hover:bg-amber-200 active:bg-amber-300 active:border-amber-300 hover:scale-105 active:scale-95 text-amber-600 hover:text-amber-700 active:text-amber-800 font-bold transition-all ease-in-out duration-300 select-none" @onclick="OnClickHandler">
+    <button class="w-full p-2 rounded-lg bg-amber-100 hover:bg-amber-200 active:bg-amber-300 hover:scale-105 active:scale-95 text-amber-600 hover:text-amber-700 active:text-amber-800 font-bold transition-all ease-in-out duration-300 select-none" @onclick="OnClickHandler">
         @ChildContent
     </button>
 }
 else
 {
-    <button class="w-full p-2 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 active:border-gray-300 hover:scale-105 active:scale-95 font-bold transition-all ease-in-out duration-300 select-none" @onclick="OnClickHandler">
-        @ChildContent
-    </button>
+    switch (Style)
+    {
+        case ButtonStyle.Accent:
+            {
+                <button class="w-full p-2 rounded-lg bg-amber-500 hover:bg-amber-600 active:bg-amber-700 hover:scale-105 active:scale-95 text-white font-bold transition-all ease-in-out duration-300 select-none" @onclick="OnClickHandler">
+                    @ChildContent
+                </button>
+                break;
+            }
+        default:
+            {
+                <button class="w-full p-2 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 hover:scale-105 active:scale-95 font-bold transition-all ease-in-out duration-300 select-none" @onclick="OnClickHandler">
+                    @ChildContent
+                </button>
+                break;
+            }
+    }
 }
 
 @code {
@@ -31,10 +45,13 @@ else
     public ButtonStyle Style { get; set; }
 
     [Parameter]
-    public bool IsDisabled { get; set; }
+    public bool IsSelected { get; set; }
 
     [Parameter]
     public bool IsInProgress { get; set; }
+
+    [Parameter]
+    public bool IsDisabled { get; set; }
 
     [Parameter]
     public EventCallback OnClick { get; set; }
