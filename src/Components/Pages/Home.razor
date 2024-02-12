@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
-@inject MeetingManager MeetingManager
+@inject ApplicationUserManager UserManager
 
 <PageTitle>NextTime</PageTitle>
 
@@ -34,7 +34,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _meetings = await MeetingManager.Meetings.Where(a => a.UserId == User!.Id).ToListAsync();
+        _meetings = await UserManager.GetMeetings(User).ToListAsync();
     }
 
     private void NavigateToMeetingCreation()
