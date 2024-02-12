@@ -1,0 +1,39 @@
+@if (IsDisabled)
+{
+    <label for="@_id" class="flex justify-center w-full p-2 rounded-lg bg-gray-50 text-gray-300 border border-gray-100 shadow-sm font-bold cursor-not-allowed select-none" disabled>
+        <input id="@_id" type="checkbox" class="hidden" value="@InternalIsChecked" disabled/>
+        <span class="text-center font-bold">@Label</span>
+    </label>
+}
+else
+{
+    <label for="@_id" class="flex justify-center w-full p-2 rounded-lg @(IsChecked ? "bg-amber-100 hover:bg-amber-200 active:bg-amber-300 border-amber-200 text-amber-600 hover:text-amber-700 active:text-amber-800" : "bg-gray-100 hover:bg-gray-200 active:bg-gray-300") border shadow-sm hover:scale-105 active:scale-95 font-bold transition-all ease-in-out duration-300 select-none">
+        <input id="@_id" type="checkbox" class="hidden" @bind="InternalIsChecked" />
+        <span class="text-center font-bold">@Label</span>
+    </label>
+}
+@code {
+    private readonly string _id = Random.Shared.NextInt64().ToString();
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool IsChecked { get; set; }
+
+    [Parameter]
+    public bool IsDisabled { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> IsCheckedChanged { get; set; }
+
+    private bool InternalIsChecked
+    {
+        get => IsChecked;
+        set
+        {
+            IsChecked = value;
+            IsCheckedChanged.InvokeAsync(value);
+        }
+    }
+}
