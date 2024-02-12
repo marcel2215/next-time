@@ -17,6 +17,11 @@ public sealed class MeetingManager(ApplicationDbContext context)
         return await context.Meetings.FindAsync(id);
     }
 
+    public IQueryable<Declaration> GetDeclarations(Meeting meeting)
+    {
+        return context.Declarations.Where(d => d.MeetingId == meeting.Id);
+    }
+
     public async Task UpdateAsync(Meeting meeting)
     {
         context.Meetings.Update(meeting);
