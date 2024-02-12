@@ -16,7 +16,7 @@
     }
     else
     {
-        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-100 border" placeholder="@Placeholder" maxlength="@MaxLength" @bind="Text" @bind:event="oninput" />
+        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-100 border" placeholder="@Placeholder" maxlength="@MaxLength" @bind="InternalText" @bind:event="oninput" @onchange="OnChangeAsync" />
     }
 </div>
 
@@ -30,9 +30,6 @@
     public string Text { get; set; } = string.Empty;
 
     [Parameter]
-    public EventCallback<string> TextChanged { get; set; }
-
-    [Parameter]
     public string Placeholder { get; set; } = string.Empty;
 
     [Parameter]
@@ -43,4 +40,29 @@
 
     [Parameter]
     public bool IsEdited { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> Confirmed { get; set; }
+
+    private string InternalText
+    {
+        get => Text;
+        set
+        {
+            if (!IsDisabled && value != InternalText && value.Length <= MaxLength)
+            {
+                Text = value;
+                TextChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    private async Task OnChangeAsync(ChangeEventArgs e)
+    {
+        InternalText = e.Value?.ToString()?.Trim() ?? string.Empty;
+        await Confirmed.InvokeAsync(InternalText);
+    }
 }
