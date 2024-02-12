@@ -27,10 +27,6 @@ public sealed class Meeting
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
-    public DateTimeOffset NotBefore { get; set; } = DateTimeOffset.UtcNow;
-
-    public DateTimeOffset NotAfter { get; set; } = DateTimeOffset.UtcNow.AddDays(30);
-
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
 
     public ICollection<Declaration> Declarations { get; } = [];
