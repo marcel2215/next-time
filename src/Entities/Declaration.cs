@@ -2,12 +2,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace NextTime.Entities;
 
-public sealed class Choice
+public sealed class Declaration
 {
-    public Choice() { }
+    public Declaration() { }
 
     [SetsRequiredMembers]
-    public Choice(Guid meetingId, Guid userId)
+    public Declaration(Guid meetingId, Guid userId)
     {
         MeetingId = meetingId;
         UserId = userId;

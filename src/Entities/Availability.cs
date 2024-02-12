@@ -8,9 +8,9 @@ public sealed class Availability
     public Availability() { }
 
     [SetsRequiredMembers]
-    public Availability(Guid choiceId, DateTimeOffset startTime, DateTimeOffset endTime, PartOfDay partOfDay = PartOfDay.All)
+    public Availability(Guid declarationId, DateTimeOffset startTime, DateTimeOffset endTime, PartOfDay partOfDay = PartOfDay.All)
     {
-        ChoiceId = choiceId;
+        DeclarationId = declarationId;
         StartTime = startTime;
         EndTime = endTime;
         PartOfDay = partOfDay;
@@ -18,9 +18,9 @@ public sealed class Availability
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required Guid ChoiceId { get; set; }
+    public required Guid DeclarationId { get; set; }
 
-    public Choice? Choice { get; set; }
+    public Declaration? Declaration { get; set; }
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 

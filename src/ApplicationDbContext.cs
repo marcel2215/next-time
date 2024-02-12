@@ -8,7 +8,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 {
     public required DbSet<Meeting> Meetings { get; init; }
 
-    public required DbSet<Choice> Choices { get; init; }
+    public required DbSet<Declaration> Declarations { get; init; }
 
     public required DbSet<Availability> Availabilities { get; init; }
 
@@ -17,8 +17,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
         base.OnModelCreating(modelBuilder);
         
         modelBuilder.Entity<ApplicationUser>().HasMany(u => u.CreatedMeetings).WithOne(a => a.Owner);
-        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Choices).WithOne(c => c.User);
-        modelBuilder.Entity<Meeting>().HasMany(a => a.Choices).WithOne(c => c.Meeting);
-        modelBuilder.Entity<Choice>().HasMany(c => c.Availabilities).WithOne(a => a.Choice);
+        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Declarations).WithOne(c => c.User);
+        modelBuilder.Entity<Meeting>().HasMany(a => a.Declarations).WithOne(c => c.Meeting);
+        modelBuilder.Entity<Declaration>().HasMany(c => c.Availabilities).WithOne(a => a.Declaration);
     }
 }

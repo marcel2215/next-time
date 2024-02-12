@@ -38,5 +38,5 @@ public sealed class Meeting
 
     public TimeOnly? StartTime { get; set; }
 
-    public ICollection<Choice> Choices { get; } = [];
+    public ICollection<Declaration> Declarations { get; } = [];
 }
