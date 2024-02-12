@@ -19,7 +19,7 @@
         }
         else if (Meeting.Duration.TotalHours > 1)
         {
-           <p>Around @(Meeting.Duration.Hours-2)-@(Meeting.Duration.Hours) Hours</p>
+            <p>Around @(Meeting.Duration.Hours - 2)-@(Meeting.Duration.Hours) Hours</p>
         }
         else
         {
@@ -30,6 +30,7 @@
     {
         <p class="m-4">@Meeting.Description</p>
     }
+    <div class="my-8 w-full h-1 bg-gray-100 rounded-xl" />
 </div>
 
 @code {
