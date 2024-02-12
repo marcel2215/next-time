@@ -15,10 +15,10 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
-        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Meetings).WithOne(a => a.User);
-        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Declarations).WithOne(c => c.User);
-        modelBuilder.Entity<Meeting>().HasMany(a => a.Declarations).WithOne(c => c.Meeting);
-        modelBuilder.Entity<Declaration>().HasMany(c => c.Suggestions).WithOne(a => a.Declaration);
+
+        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Meetings).WithOne(m => m.User).HasForeignKey(m => m.UserId);
+        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Declarations).WithOne(d => d.User).HasForeignKey(d => d.UserId);
+        modelBuilder.Entity<Meeting>().HasMany(m => m.Declarations).WithOne(d => d.Meeting).HasForeignKey(d => d.MeetingId);
+        modelBuilder.Entity<Declaration>().HasMany(d => d.Suggestions).WithOne(s => s.Declaration).HasForeignKey(s => s.DeclarationId);
     }
 }
