@@ -1,12 +1,12 @@
 @if (IsDisabled)
 {
-    <button class="w-full p-2 rounded-lg bg-gray-50 text-gray-300 font-bold cursor-not-allowed select-none">
+    <button class="w-full p-2 rounded-lg bg-gray-50 text-gray-300 font-bold cursor-not-allowed select-none" disabled>
         @ChildContent
     </button>
 }
 else if (IsInProgress)
 {
-    <button class="flex justify-center w-full p-2 rounded-lg bg-gray-50 text-gray-300 font-bold animate-pulse cursor-progress select-none">
+    <button class="flex justify-center w-full p-2 rounded-lg bg-gray-50 text-gray-300 font-bold animate-pulse cursor-progress select-none" disabled>
         <img src="/img/loading.gif" height="24" width="24">
     </button>
 }
