@@ -8,10 +8,10 @@
     return;
 }
 
-<div class="text-center">
+<div class="text-center space-y-4">
     <h1 class="font-extrabold">NEXT<span class="text-amber-500">TIME</span></h1>
-    <h2 class="mt-4 text-4xl font-bold">@Meeting.Title</h2>
-    <div class="mt-4 space-x-2 flex justify-center items-center">
+    <h2 class="text-4xl font-bold">@Meeting.Title</h2>
+    <div class="space-x-2 flex justify-center items-center">
         <img src="/img/clock.svg" alt="Clock" height="24" width="24" />
         @if (Meeting.Duration.TotalDays >= 1)
         {
@@ -28,9 +28,18 @@
     </div>
     @if (!string.IsNullOrWhiteSpace(Meeting.Description))
     {
-        <p class="m-4">@Meeting.Description</p>
+        <p>@Meeting.Description</p>
     }
-    <div class="my-8 w-full h-1 bg-gray-100 rounded-xl" />
+    <div class="py-4">
+        <div class="w-full h-1 bg-gray-100 rounded-xl" />
+    </div>
+    @if (Declarations.Count == 0)
+    {
+        <p>No one has suggested a time for this event yet.</p>
+    }
+    <div class="pt-4">
+        <NTButton Style="ButtonStyle.Accent">Create Suggestion</NTButton>
+    </div>
 </div>
 
 @code {
@@ -38,6 +47,8 @@
     public string? Id { get; set; }
 
     private Meeting? Meeting { get; set; }
+
+    private List<Declaration> Declarations { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,6 +60,9 @@
         if (Meeting == null)
         {
             NavigationManager.NavigateTo("/");
+            return;
         }
+
+        Declarations = await MeetingManager.GetDeclarations(Meeting).ToListAsync();
     }
 }

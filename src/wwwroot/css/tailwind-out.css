@@ -548,13 +548,8 @@ video {
   position: static;
 }
 
-.m-4 {
-  margin: 1rem;
-}
-
-.my-8 {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+.m-8 {
+  margin: 2rem;
 }
 
 .ml-1 {
@@ -565,16 +560,12 @@ video {
   margin-top: 0.25rem;
 }
 
-.mt-4 {
-  margin-top: 1rem;
-}
-
 .mt-8 {
   margin-top: 2rem;
 }
 
-.mt-12 {
-  margin-top: 3rem;
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .flex {
@@ -712,8 +703,26 @@ video {
   padding: 2rem;
 }
 
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 .pl-2 {
   padding-left: 0.5rem;
+}
+
+.pt-8 {
+  padding-top: 2rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
 }
 
 .text-center {
