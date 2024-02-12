@@ -7,11 +7,11 @@
     <base href="/" />
     <link rel="stylesheet" href="NextTime.styles.css" />
     <link rel="stylesheet" href="/css/tailwind-out.css" />
-    <HeadOutlet />
+    <HeadOutlet @rendermode="@RenderMode.InteractiveServer" />
 </head>
 
 <body>
-    <Routes />
+    <Routes @rendermode="@RenderMode.InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
 </body>
 
