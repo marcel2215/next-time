@@ -17,7 +17,7 @@
             <h2 class="text-center text-gray-500 font-bold">CREATED MEETINGS</h2>
             @foreach (var meeting in _meetings)
             {
-                <NTButton>@meeting.Title</NTButton>
+                <NTButton Clicked="@(() => NavigateToMeetingDetails(meeting.Id))">@meeting.Title</NTButton>
             }
         }
     </div>
@@ -40,5 +40,10 @@
     private void NavigateToMeetingCreation()
     {
         NavigationManager.NavigateTo("/create-meeting");
+    }
+
+    private void NavigateToMeetingDetails(Guid id)
+    {
+        NavigationManager.NavigateTo($"/meeting/{id}");
     }
 }
