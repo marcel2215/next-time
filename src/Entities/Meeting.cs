@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using NextTime.Enums;
 
 namespace NextTime.Entities;
 
@@ -31,8 +30,6 @@ public sealed class Meeting
     public DateTimeOffset NotBefore { get; set; } = DateTimeOffset.UtcNow;
 
     public DateTimeOffset NotAfter { get; set; } = DateTimeOffset.UtcNow.AddDays(30);
-
-    public PartOfDay PartOfDay { get; set; } = PartOfDay.All;
 
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
 
