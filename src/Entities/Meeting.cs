@@ -33,7 +33,5 @@ public sealed class Meeting
 
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
 
-    public TimeOnly? StartTime { get; set; }
-
     public ICollection<Declaration> Declarations { get; } = [];
 }
