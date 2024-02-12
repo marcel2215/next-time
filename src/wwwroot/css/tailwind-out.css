@@ -548,6 +548,10 @@ video {
   position: static;
 }
 
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
 .flex {
   display: flex;
 }
@@ -615,6 +619,11 @@ video {
   border-color: rgb(253 230 138 / var(--tw-border-opacity));
 }
 
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity));
+}
+
 .bg-amber-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 243 199 / var(--tw-bg-opacity));
@@ -625,14 +634,14 @@ video {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
-.bg-white {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .p-2 {
@@ -641,6 +650,10 @@ video {
 
 .p-8 {
   padding: 2rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
 }
 
 .text-center {
@@ -657,6 +670,11 @@ video {
   line-height: 1;
 }
 
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -666,24 +684,19 @@ video {
   color: rgb(245 158 11 / var(--tw-text-opacity));
 }
 
-.text-gray-500 {
+.text-amber-600 {
   --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
-}
-
-.text-gray-100 {
-  --tw-text-opacity: 1;
-  color: rgb(243 244 246 / var(--tw-text-opacity));
-}
-
-.text-gray-200 {
-  --tw-text-opacity: 1;
-  color: rgb(229 231 235 / var(--tw-text-opacity));
+  color: rgb(217 119 6 / var(--tw-text-opacity));
 }
 
 .text-gray-300 {
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
+}
+
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
 .transition-all {
@@ -716,6 +729,11 @@ video {
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
+.hover\:text-amber-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(180 83 9 / var(--tw-text-opacity));
+}
+
 .active\:scale-95:active {
   --tw-scale-x: .95;
   --tw-scale-y: .95;
@@ -740,6 +758,11 @@ video {
 .active\:bg-gray-300:active {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+
+.active\:text-amber-800:active {
+  --tw-text-opacity: 1;
+  color: rgb(146 64 14 / var(--tw-text-opacity));
 }
 
 @media (min-width: 640px) {

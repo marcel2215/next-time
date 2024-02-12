@@ -1,0 +1,31 @@
+<div>
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label for="@_id" class="w-full font-bold pl-2 text-sm">@Label</label>
+    }
+
+    @if (IsDisabled)
+    {
+        <input id="@_id" class="w-full mt-1 p-2 rounded-lg bg-gray-50 border border-gray-100 text-gray-300 cursor-not-allowed select-none" value="@Text" disabled/>
+    }
+    else
+    {
+        <input id="@_id" class="w-full mt-1 p-2 rounded-lg bg-gray-100 border" @bind="Text" @bind:event="oninput" />
+    }
+</div>
+
+@code {
+    private readonly string _id = Random.Shared.NextInt64().ToString();
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public bool IsDisabled { get; set; }
+}
