@@ -6,7 +6,7 @@
 
     @if (IsDisabled)
     {
-        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-50 border border-gray-100 text-gray-300 cursor-not-allowed select-none" value="@Text" placeholder="@Placeholder" disabled/>
+        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-50 border border-gray-100 text-gray-300 cursor-not-allowed select-none" value="@Text" placeholder="@Placeholder" disabled />
     }
     else
     {
@@ -24,10 +24,10 @@
     public string Text { get; set; } = string.Empty;
 
     [Parameter]
-    public string Placeholder { get; set; } = string.Empty;
+    public EventCallback<string> TextChanged { get; set; }
 
     [Parameter]
-    public EventCallback<string> TextChanged { get; set; }
+    public string Placeholder { get; set; } = string.Empty;
 
     [Parameter]
     public bool IsDisabled { get; set; }
