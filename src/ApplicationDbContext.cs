@@ -16,7 +16,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     {
         base.OnModelCreating(modelBuilder);
         
-        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.CreatedMeetings).WithOne(a => a.Owner);
+        modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Meetings).WithOne(a => a.Owner);
         modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Declarations).WithOne(c => c.User);
         modelBuilder.Entity<Meeting>().HasMany(a => a.Declarations).WithOne(c => c.Meeting);
         modelBuilder.Entity<Declaration>().HasMany(c => c.Suggestions).WithOne(a => a.Declaration);
