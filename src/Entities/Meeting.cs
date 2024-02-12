@@ -21,7 +21,7 @@ public sealed class Meeting
 
     public required string Title { get; set; }
 
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
