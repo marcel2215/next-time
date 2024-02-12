@@ -17,6 +17,11 @@ public sealed class DeclarationManager(ApplicationDbContext context)
         return await context.Declarations.FindAsync(id);
     }
 
+    public IQueryable<Suggestion> GetSuggestions(Declaration declaration)
+    {
+        return context.Suggestions.Where(s => s.DeclarationId == declaration.Id);
+    }
+
     public async Task UpdateAsync(Declaration declaration)
     {
         context.Declarations.Update(declaration);
