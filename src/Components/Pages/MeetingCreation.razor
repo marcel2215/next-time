@@ -79,6 +79,11 @@
     {
         if (Meeting != null)
         {
+            if (string.IsNullOrWhiteSpace(Meeting.Title))
+            {
+                Meeting.Title = "Untitled Meeting";
+            }
+
             await MeetingManager.CreateAsync(Meeting);
             NavigationManager.NavigateTo($"/meeting/{Meeting.Id}");
         }
