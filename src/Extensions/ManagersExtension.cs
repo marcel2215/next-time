@@ -9,7 +9,7 @@ public static class ManagersExtension
         services.AddScoped<ApplicationUserManager>();
         services.AddScoped<MeetingManager>();
         services.AddScoped<DeclarationManager>();
-        services.AddScoped<AvailabilityManager>();
+        services.AddScoped<SuggestionManager>();
 
         return services;
     }

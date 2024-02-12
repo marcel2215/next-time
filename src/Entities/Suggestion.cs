@@ -3,12 +3,12 @@ using NextTime.Enums;
 
 namespace NextTime.Entities;
 
-public sealed class Availability
+public sealed class Suggestion
 {
-    public Availability() { }
+    public Suggestion() { }
 
     [SetsRequiredMembers]
-    public Availability(Guid declarationId, DateTimeOffset startTime, DateTimeOffset endTime, PartOfDay partOfDay = PartOfDay.All)
+    public Suggestion(Guid declarationId, DateTimeOffset startTime, DateTimeOffset endTime, PartOfDay partOfDay = PartOfDay.All)
     {
         DeclarationId = declarationId;
         StartTime = startTime;
