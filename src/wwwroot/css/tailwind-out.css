@@ -548,12 +548,20 @@ video {
   position: static;
 }
 
+.m-8 {
+  margin: 2rem;
+}
+
 .ml-1 {
   margin-left: 0.25rem;
 }
 
 .mt-1 {
   margin-top: 0.25rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
 }
 
 .flex {
@@ -699,6 +707,11 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 
 .font-bold {

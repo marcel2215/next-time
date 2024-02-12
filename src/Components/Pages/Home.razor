@@ -5,15 +5,25 @@
 
 <PageTitle>NextTime</PageTitle>
 
-<div class="space-y-8">
+<div>
     <h1 class="text-5xl sm:text-6xl text-center font-bold">Next<span class="text-amber-500">Time</span></h1>
-
-    @if (_meetings.Count == 0)
-    {
-        <p class="text-center text-gray-500">You haven't created any meetings.</p>
-    }
-
-    <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToMeetingCreation">Create Meeting</NTButton>
+    <div class="mt-8 p:mt-12 space-y-4">
+        @if (_meetings.Count == 0)
+        {
+            <p class="text-center text-gray-500">You haven't created any meetings.</p>
+        }
+        else
+        {
+            <h2 class="text-center text-gray-500 font-bold">CREATED MEETINGS</h2>
+            @foreach (var meeting in _meetings)
+            {
+                <NTButton>@meeting.Title</NTButton>
+            }
+        }
+    </div>
+    <div class="mt-8">
+        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToMeetingCreation">Create Meeting</NTButton>
+    </div>
 </div>
 
 @code {
