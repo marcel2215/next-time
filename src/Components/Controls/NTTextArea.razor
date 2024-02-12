@@ -1,0 +1,71 @@
+<div>
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label for="@_id" class="flex items-center w-full font-bold pl-2 text-sm">
+            @Label
+            @if (IsEdited)
+            {
+                <span class="ml-1 text-xs text-gray-400"> - Edited</span>
+            }
+        </label>
+    }
+
+    @if (IsDisabled)
+    {
+        <textarea id="@_id" rows="@Rows" class="w-full mt-1 p-2 rounded-lg bg-gray-50 border border-gray-100 shadow-sm text-gray-300 cursor-not-allowed select-none" value="@Text" placeholder="@Placeholder" disabled />
+    }
+    else
+    {
+        <textarea id="@_id" rows="@Rows" class="w-full mt-1 p-2 rounded-lg bg-gray-100 border shadow-sm" placeholder="@Placeholder" maxlength="@MaxLength" @bind="InternalText" @bind:event="oninput" @onchange="OnChangeAsync" />
+    }
+</div>
+
+@code {
+    private readonly string _id = Random.Shared.NextInt64().ToString();
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+
+    [Parameter]
+    public int Rows { get; set; } = 3;
+
+    [Parameter]
+    public int MaxLength { get; set; } = 500;
+    
+    [Parameter]
+    public bool IsDisabled { get; set; }
+
+    [Parameter]
+    public bool IsEdited { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> Confirmed { get; set; }
+
+    private string InternalText
+    {
+        get => Text;
+        set
+        {
+            if (!IsDisabled && value != InternalText && value.Length <= MaxLength)
+            {
+                Text = value;
+                TextChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    private async Task OnChangeAsync(ChangeEventArgs e)
+    {
+        InternalText = e.Value?.ToString()?.Trim() ?? string.Empty;
+        await Confirmed.InvokeAsync(InternalText);
+    }
+}
