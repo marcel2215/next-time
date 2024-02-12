@@ -54,13 +54,13 @@ else
     public bool IsDisabled { get; set; }
 
     [Parameter]
-    public EventCallback OnClick { get; set; }
+    public EventCallback Clicked { get; set; }
 
     private async Task OnClickHandler()
     {
         if (!IsDisabled && !IsInProgress)
         {
-            await OnClick.InvokeAsync();
+            await Clicked.InvokeAsync();
         }
     }
 }
