@@ -4,9 +4,9 @@
 
 <div class="space-y-4">
     <h1 class="text-4xl font-bold">Create Meeting</h1>
-    <NTTextBox Label="Name" />
-    <NTTextArea Label="Description" />
-    <NTTextBox Label="Location" />
+    <NTTextBox Label="Name" @bind-Text="Meeting.Title" />
+    <NTTextArea Label="Description" @bind-Text="Meeting.Description" />
+    <NTTextBox Label="Location" @bind-Text="Meeting.Location" />
     <div class="flex space-x-4">
         <NTButton Clicked="NavigateToHomePage">Cancel</NTButton>
         <NTButton Style="ButtonStyle.Accent" Clicked="CreateMeetingAsync">Create</NTButton>
@@ -17,12 +17,12 @@
     [CascadingParameter]
     public required ApplicationUser User { get; init; }
 
-    public Meeting? Meeting { get; set; }
+    public Meeting Meeting { get; set; } = new(Guid.Empty, "Unnamed");
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Meeting = new Meeting(User.Id, "Unnamed");
+        Meeting.OwnerId = User.Id;
     }
 
     private void NavigateToHomePage()
@@ -35,6 +35,7 @@
         if (Meeting != null)
         {
             await MeetingManager.CreateAsync(Meeting);
+            NavigationManager.NavigateTo($"/meeting/{Meeting.Id}");
         }
     }
 }
