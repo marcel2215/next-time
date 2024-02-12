@@ -16,7 +16,7 @@ public sealed class Meeting
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required Guid OwnerId { get; init; }
+    public required Guid OwnerId { get; set; }
 
     public ApplicationUser? Owner { get; set; }
 

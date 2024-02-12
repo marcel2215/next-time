@@ -15,11 +15,11 @@ public sealed class Choice
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required Guid MeetingId { get; init; }
+    public required Guid MeetingId { get; set; }
 
     public Meeting? Meeting { get; set; }
 
-    public required Guid UserId { get; init; }
+    public required Guid UserId { get; set; }
 
     public ApplicationUser? User { get; set; }
 

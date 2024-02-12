@@ -18,7 +18,7 @@ public sealed class Availability
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required Guid ChoiceId { get; init; }
+    public required Guid ChoiceId { get; set; }
 
     public Choice? Choice { get; set; }
 
