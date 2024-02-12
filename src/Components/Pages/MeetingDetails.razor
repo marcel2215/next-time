@@ -1,0 +1,24 @@
+@page "/meeting/{id}"
+@inject NavigationManager NavigationManager
+@inject MeetingManager MeetingManager
+
+<h1>@Meeting?.Title</h1>
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    public Meeting? Meeting { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Guid.TryParse(Id, out var id))
+        {
+            Meeting = await MeetingManager.FindByIdAsync(id);
+        }
+
+        if (Meeting == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}
