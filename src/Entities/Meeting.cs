@@ -7,17 +7,17 @@ public sealed class Meeting
     public Meeting() { }
 
     [SetsRequiredMembers]
-    public Meeting(Guid ownerId, string title)
+    public Meeting(Guid userId, string title)
     {
-        OwnerId = ownerId;
+        UserId = userId;
         Title = title;
     }
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required Guid OwnerId { get; set; }
+    public required Guid UserId { get; set; }
 
-    public ApplicationUser? Owner { get; set; }
+    public ApplicationUser? User { get; set; }
 
     public required string Title { get; set; }
 
