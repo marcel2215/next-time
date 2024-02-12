@@ -23,8 +23,6 @@ public sealed class Meeting
 
     public string? Description { get; set; }
 
-    public string? Location { get; set; }
-
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
