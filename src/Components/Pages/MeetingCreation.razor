@@ -1,7 +1,16 @@
 @page "/create-meeting"
+@inject NavigationManager NavigationManager
+@inject MeetingManager MeetingManager
 
-<div>
+<div class="space-y-4">
     <h1 class="text-4xl font-bold">Create Meeting</h1>
+    <NTTextBox Label="Name" />
+    <NTTextArea Label="Description" />
+    <NTTextBox Label="Location" />
+    <div class="flex space-x-4">
+        <NTButton Clicked="NavigateToHomePage">Cancel</NTButton>
+        <NTButton Style="ButtonStyle.Accent" Clicked="CreateMeetingAsync">Create</NTButton>
+    </div>
 </div>
 
 @code {
@@ -14,5 +23,18 @@
     {
         base.OnInitialized();
         Meeting = new Meeting(User.Id, "Unnamed");
+    }
+
+    private void NavigateToHomePage()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private async Task CreateMeetingAsync()
+    {
+        if (Meeting != null)
+        {
+            await MeetingManager.CreateAsync(Meeting);
+        }
     }
 }
