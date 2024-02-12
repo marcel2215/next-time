@@ -12,11 +12,11 @@
 
     @if (IsDisabled)
     {
-        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-50 border border-gray-100 text-gray-300 cursor-not-allowed select-none" value="@Text" placeholder="@Placeholder" disabled />
+        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-50 border border-gray-100 shadow-sm text-gray-300 cursor-not-allowed select-none" value="@Text" placeholder="@Placeholder" disabled />
     }
     else
     {
-        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-100 border" placeholder="@Placeholder" maxlength="@MaxLength" @bind="InternalText" @bind:event="oninput" @onchange="OnChangeAsync" />
+        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-100 border shadow-sm" placeholder="@Placeholder" maxlength="@MaxLength" @bind="InternalText" @bind:event="oninput" @onchange="OnChangeAsync" />
     }
 </div>
 
