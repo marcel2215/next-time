@@ -11,7 +11,7 @@ using NextTime;
 namespace NextTime.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240212221638_InitialCreate")]
+    [Migration("20240212223621_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -245,6 +245,7 @@ namespace NextTime.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<TimeSpan>("Duration")
