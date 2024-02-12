@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using NextTime.Enums;
 
 namespace NextTime.Entities;
 
@@ -8,12 +7,10 @@ public sealed class Suggestion
     public Suggestion() { }
 
     [SetsRequiredMembers]
-    public Suggestion(Guid declarationId, DateTimeOffset startTime, DateTimeOffset endTime, PartOfDay partOfDay = PartOfDay.All)
+    public Suggestion(Guid declarationId, DateTimeOffset suggestedTime)
     {
         DeclarationId = declarationId;
-        StartTime = startTime;
-        EndTime = endTime;
-        PartOfDay = partOfDay;
+        SuggestedTime = suggestedTime;
     }
 
     public Guid Id { get; init; } = Guid.NewGuid();
@@ -24,9 +21,5 @@ public sealed class Suggestion
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
-    public required DateTimeOffset StartTime { get; set; }
-
-    public required DateTimeOffset EndTime { get; set; }
-
-    public PartOfDay PartOfDay { get; set; } = PartOfDay.All;
+    public required DateTimeOffset SuggestedTime { get; set; }
 }
