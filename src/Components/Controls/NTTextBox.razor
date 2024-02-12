@@ -10,7 +10,7 @@
     }
     else
     {
-        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-100 border" placeholder="@Placeholder" @bind="Text" @bind:event="oninput" />
+        <input id="@_id" type="text" class="w-full mt-1 p-2 rounded-lg bg-gray-100 border" placeholder="@Placeholder" maxlength="@MaxLength" @bind="Text" @bind:event="oninput" />
     }
 </div>
 
@@ -28,6 +28,9 @@
 
     [Parameter]
     public string Placeholder { get; set; } = string.Empty;
+
+    [Parameter]
+    public int MaxLength { get; set; } = 100;
 
     [Parameter]
     public bool IsDisabled { get; set; }
