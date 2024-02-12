@@ -37,7 +37,7 @@
     [Parameter]
     public string? Id { get; set; }
 
-    public Meeting? Meeting { get; set; }
+    private Meeting? Meeting { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
