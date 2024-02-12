@@ -4,8 +4,8 @@
 
 <div class="space-y-4">
     <h1 class="text-4xl font-bold">Create Meeting</h1>
-    <NTTextBox Label="Title" @bind-Text="Meeting.Title" />
-    <NTTextArea Label="Description" @bind-Text="Meeting.Description" />
+    <NTTextBox Label="Title" Placeholder="My Super Party" @bind-Text="Meeting.Title" />
+    <NTTextArea Label="Description" Placeholder="Here you can add more details about the event..." @bind-Text="Meeting.Description" />
     <div>
         <label class="pl-2 text-sm font-bold">Estimated Duration</label>
         <div class="mt-1 space-y-2">
@@ -27,7 +27,7 @@
     [CascadingParameter]
     public required ApplicationUser User { get; init; }
 
-    public Meeting Meeting { get; set; } = new(Guid.Empty, "Unnamed");
+    public Meeting Meeting { get; set; } = new(Guid.Empty, string.Empty);
 
     private bool IsEstDuration1Hour
     {
