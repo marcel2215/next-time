@@ -12,6 +12,12 @@ public sealed class SuggestionManager(ApplicationDbContext context)
         await context.SaveChangesAsync();
     }
 
+    public async Task CreateRangeAsync(IEnumerable<Suggestion> suggestions)
+    {
+        await context.Suggestions.AddRangeAsync(suggestions);
+        await context.SaveChangesAsync();
+    }
+
     public async Task<Suggestion?> FindByIdAsync(Guid id)
     {
         return await context.Suggestions.FindAsync(id);
