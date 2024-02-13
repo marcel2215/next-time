@@ -1,0 +1,186 @@
+@page "/d/{declarationId}/new-suggestion"
+@inject NavigationManager NavigationManager
+@inject DeclarationManager DeclarationManager
+@inject SuggestionManager SuggestionManager
+
+<PageTitle>NextTime - Create Suggestion</PageTitle>
+
+@if (_declaration == null)
+{
+    <LoadingScreen />
+    return;
+}
+
+<div class="space-y-4">
+    <h1 class="text-4xl font-bold">When can you come to this event?</h1>
+    <p>Choose all days that fit you. NextTime will find the best date for all participants.</p>
+    <div class="space-y-2">
+        @foreach (var selectableDay in _selectableDays)
+        {
+            <NTCheckBox @bind-IsChecked="selectableDay.IsSelected">@selectableDay.FriendlyDate</NTCheckBox>
+            @if (selectableDay.IsSelected)
+            {
+                <div class="flex space-x-1 text-sm sm:text-base">
+                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is8AMSelected">8:00</NTCheckBox>
+                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is10AMSelected">10:00</NTCheckBox>
+                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is12PMSelected">12:00</NTCheckBox>
+                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is4PMSelected">16:00</NTCheckBox>
+                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is6PMSelected">18:00</NTCheckBox>
+                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is8PMSelected">20:00</NTCheckBox>
+                </div>
+                <div class="w-full h-1 bg-gray-100 rounded-xl" />
+            }
+        }
+    </div>
+    <NTButton Clicked="LoadMoreDaysAsync">Load more days</NTButton>
+    <NTButton Style="ButtonStyle.Accent" Clicked="SaveSuggestionAsync">Save Suggestion</NTButton>
+</div>
+
+@code {
+    private Declaration? _declaration;
+
+    private List<SelectableDay> _selectableDays = [];
+
+    [Parameter]
+    public string? DeclarationId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Guid.TryParse(DeclarationId, out var declarationGuid))
+        {
+            _declaration = await DeclarationManager.FindByIdAsync(declarationGuid);
+        }
+
+        if (_declaration == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+        await LoadMoreDaysAsync();
+    }
+
+    private async Task LoadMoreDaysAsync()
+    {
+        var lastTime = _selectableDays.LastOrDefault()?.Time ?? DateTimeOffset.UtcNow.Date;
+        for (var i = 1; i <= 14; i++)
+        {
+            var futureTime = lastTime.AddDays(i);
+            _selectableDays.Add(new SelectableDay(futureTime));
+        }
+
+        await LoadSuggestionsAsync();
+    }
+
+    private async Task LoadSuggestionsAsync()
+    {
+        if (_declaration == null)
+        {
+            return;
+        }
+
+        await foreach (var suggestion in DeclarationManager.GetSuggestions(_declaration).AsNoTracking().AsAsyncEnumerable())
+        {
+            var selectableDay = _selectableDays.FirstOrDefault(d => d.Time.Date == suggestion.SuggestedTime.Date);
+            if (selectableDay != null)
+            {
+                var isAnySelected = false;
+
+                if (suggestion.SuggestedTime.Hour == 8)
+                {
+                    selectableDay.Is8AMSelected = true;
+                    isAnySelected = true;
+                }
+
+                if (suggestion.SuggestedTime.Hour == 10)
+                {
+                    selectableDay.Is10AMSelected = true;
+                    isAnySelected = true;
+                }
+
+                if (suggestion.SuggestedTime.Hour == 12)
+                {
+                    selectableDay.Is12PMSelected = true;
+                    isAnySelected = true;
+                }
+
+                if (suggestion.SuggestedTime.Hour == 16)
+                {
+                    selectableDay.Is4PMSelected = true;
+                    isAnySelected = true;
+                }
+
+                if (suggestion.SuggestedTime.Hour == 18)
+                {
+                    selectableDay.Is6PMSelected = true;
+                    isAnySelected = true;
+                }
+
+                if (suggestion.SuggestedTime.Hour == 20)
+                {
+                    selectableDay.Is8PMSelected = true;
+                    isAnySelected = true;
+                }
+
+                if (isAnySelected)
+                {
+                    selectableDay.IsSelected = true;
+                }
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task SaveSuggestionAsync()
+    {
+        if (_declaration == null)
+        {
+            return;
+        }
+
+        var suggestions = new List<Suggestion>();
+        foreach (var selectableDay in _selectableDays.Where(d => d.IsSelected))
+        {
+            if (selectableDay.Is8AMSelected)
+            {
+                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(8));
+                suggestions.Add(suggestion);
+            }
+
+            if (selectableDay.Is10AMSelected)
+            {
+                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(10));
+                suggestions.Add(suggestion);
+            }
+
+            if (selectableDay.Is12PMSelected)
+            {
+                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(12));
+                suggestions.Add(suggestion);
+            }
+
+            if (selectableDay.Is4PMSelected)
+            {
+                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(16));
+                suggestions.Add(suggestion);
+            }
+
+            if (selectableDay.Is6PMSelected)
+            {
+                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(18));
+                suggestions.Add(suggestion);
+            }
+
+            if (selectableDay.Is8PMSelected)
+            {
+                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(20));
+                suggestions.Add(suggestion);
+            }
+        }
+
+        await DeclarationManager.DeleteSuggestionsAsync(_declaration);
+        await SuggestionManager.CreateRangeAsync(suggestions);
+
+        NavigationManager.NavigateTo($"/m/{_declaration.MeetingId}");
+    }
+}
