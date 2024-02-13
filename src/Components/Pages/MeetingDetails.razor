@@ -1,6 +1,7 @@
 @page "/meeting/{id}"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
+@inject DeclarationManager DeclarationManager
 
 @if (Meeting == null)
 {
@@ -38,13 +39,16 @@
         <p>No one has suggested a time for this event yet.</p>
     }
     <div class="pt-4">
-        <NTButton Style="ButtonStyle.Accent">Create Suggestion</NTButton>
+        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToSuggestionCreation">Create Suggestion</NTButton>
     </div>
 </div>
 
 @code {
     [Parameter]
     public string? Id { get; set; }
+
+    [CascadingParameter]
+    public ApplicationUser? User { get; set; }
 
     private Meeting? Meeting { get; set; }
 
@@ -64,5 +68,22 @@
         }
 
         Declarations = await MeetingManager.GetDeclarations(Meeting).ToListAsync();
+    }
+
+    private async Task NavigateToSuggestionCreation()
+    {
+        if (Meeting == null || User == null)
+        {
+            return;
+        }
+
+        var declaration = await MeetingManager.GetDeclarationAsync(Meeting, User.Id);
+        if (declaration == null)
+        {
+            declaration = new Declaration(Meeting.Id, User.Id);
+            await DeclarationManager.CreateAsync(declaration);
+        }
+
+        NavigationManager.NavigateTo($"/d/{declaration.Id}/new-suggestion");
     }
 }
