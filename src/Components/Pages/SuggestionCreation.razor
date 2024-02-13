@@ -20,7 +20,7 @@
             <NTCheckBox @bind-IsChecked="selectableDay.IsSelected">@selectableDay.FriendlyDate</NTCheckBox>
             @if (selectableDay.IsSelected)
             {
-                <div class="flex space-x-1 text-sm sm:text-base">
+                <div class="flex space-x-1 text-xs sm:text-base">
                     <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is8AMSelected">8:00</NTCheckBox>
                     <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is10AMSelected">10:00</NTCheckBox>
                     <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is12PMSelected">12:00</NTCheckBox>
