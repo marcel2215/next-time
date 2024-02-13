@@ -18,9 +18,9 @@ public sealed class DeclarationManager(ApplicationDbContext context)
         return await context.Declarations.FindAsync(id);
     }
 
-    public IQueryable<Suggestion> GetSuggestions(Declaration declaration)
+    public IQueryable<Preference> GetPreferences(Declaration declaration)
     {
-        return context.Suggestions.Where(s => s.DeclarationId == declaration.Id);
+        return context.Preferences.Where(p => p.DeclarationId == declaration.Id);
     }
 
     public async Task UpdateAsync(Declaration declaration)
@@ -35,8 +35,8 @@ public sealed class DeclarationManager(ApplicationDbContext context)
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteSuggestionsAsync(Declaration declaration)
+    public async Task DeletePreferencesAsync(Declaration declaration)
     {
-        await context.Suggestions.Where(s => s.DeclarationId == declaration.Id).ExecuteDeleteAsync();
+        await context.Preferences.Where(p => p.DeclarationId == declaration.Id).ExecuteDeleteAsync();
     }
 }

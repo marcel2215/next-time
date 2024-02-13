@@ -47,14 +47,14 @@
         <p>No one has suggested a time for this event yet.</p>
     }
     <div class="pt-4">
-        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToSuggestionCreation">
+        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToPreferenceCreation">
             @if (_userDeclaration == null)
             {
-                <span>Create Suggestion</span>
+                <span>Add My Preference</span>
             }
             else
             {
-                <span>Edit My Suggestion</span>
+                <span>Edit My Preference</span>
             }
         </NTButton>
     </div>
@@ -105,7 +105,7 @@
         }
 
         var recommendedTime = await MeetingManager.GetDeclarations(_meeting)
-        .SelectMany(d => d.Suggestions)
+        .SelectMany(d => d.Preferences)
         .GroupBy(s => s.SuggestedTime)
         .OrderByDescending(g => g.Count())
         .Select(g => g.Key)
@@ -114,7 +114,7 @@
         return recommendedTime;
     }
 
-    private async Task NavigateToSuggestionCreation()
+    private async Task NavigateToPreferenceCreation()
     {
         if (_meeting == null || User == null)
         {
@@ -127,6 +127,6 @@
             await DeclarationManager.CreateAsync(_userDeclaration);
         }
 
-        NavigationManager.NavigateTo($"/d/{_userDeclaration.Id}/new-suggestion");
+        NavigationManager.NavigateTo($"/d/{_userDeclaration.Id}/add-preference");
     }
 }

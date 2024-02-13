@@ -1,9 +1,9 @@
-@page "/d/{declarationId}/new-suggestion"
+@page "/d/{declarationId}/add-suggestion"
 @inject NavigationManager NavigationManager
 @inject DeclarationManager DeclarationManager
-@inject SuggestionManager SuggestionManager
+@inject PreferenceManager PreferenceManager
 
-<PageTitle>NextTime - Create Suggestion</PageTitle>
+<PageTitle>NextTime - Edit My Preferences</PageTitle>
 
 @if (_declaration == null)
 {
@@ -78,44 +78,44 @@
             return;
         }
 
-        await foreach (var suggestion in DeclarationManager.GetSuggestions(_declaration).AsNoTracking().AsAsyncEnumerable())
+        await foreach (var preference in DeclarationManager.GetPreferences(_declaration).AsNoTracking().AsAsyncEnumerable())
         {
-            var selectableDay = _selectableDays.FirstOrDefault(d => d.Time.Date == suggestion.SuggestedTime.Date);
+            var selectableDay = _selectableDays.FirstOrDefault(d => d.Time.Date == preference.SuggestedTime.Date);
             if (selectableDay != null)
             {
                 var isAnySelected = false;
 
-                if (suggestion.SuggestedTime.Hour == 8)
+                if (preference.SuggestedTime.Hour == 8)
                 {
                     selectableDay.Is8AMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (suggestion.SuggestedTime.Hour == 10)
+                if (preference.SuggestedTime.Hour == 10)
                 {
                     selectableDay.Is10AMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (suggestion.SuggestedTime.Hour == 12)
+                if (preference.SuggestedTime.Hour == 12)
                 {
                     selectableDay.Is12PMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (suggestion.SuggestedTime.Hour == 16)
+                if (preference.SuggestedTime.Hour == 16)
                 {
                     selectableDay.Is4PMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (suggestion.SuggestedTime.Hour == 18)
+                if (preference.SuggestedTime.Hour == 18)
                 {
                     selectableDay.Is6PMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (suggestion.SuggestedTime.Hour == 20)
+                if (preference.SuggestedTime.Hour == 20)
                 {
                     selectableDay.Is8PMSelected = true;
                     isAnySelected = true;
@@ -138,48 +138,48 @@
             return;
         }
 
-        var suggestions = new List<Suggestion>();
+        var preferences = new List<Preference>();
         foreach (var selectableDay in _selectableDays.Where(d => d.IsSelected))
         {
             if (selectableDay.Is8AMSelected)
             {
-                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(8));
-                suggestions.Add(suggestion);
+                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(8));
+                preferences.Add(preference);
             }
 
             if (selectableDay.Is10AMSelected)
             {
-                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(10));
-                suggestions.Add(suggestion);
+                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(10));
+                preferences.Add(preference);
             }
 
             if (selectableDay.Is12PMSelected)
             {
-                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(12));
-                suggestions.Add(suggestion);
+                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(12));
+                preferences.Add(preference);
             }
 
             if (selectableDay.Is4PMSelected)
             {
-                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(16));
-                suggestions.Add(suggestion);
+                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(16));
+                preferences.Add(preference);
             }
 
             if (selectableDay.Is6PMSelected)
             {
-                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(18));
-                suggestions.Add(suggestion);
+                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(18));
+                preferences.Add(preference);
             }
 
             if (selectableDay.Is8PMSelected)
             {
-                var suggestion = new Suggestion(_declaration.Id, selectableDay.Time.AddHours(20));
-                suggestions.Add(suggestion);
+                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(20));
+                preferences.Add(preference);
             }
         }
 
-        await DeclarationManager.DeleteSuggestionsAsync(_declaration);
-        await SuggestionManager.CreateRangeAsync(suggestions);
+        await DeclarationManager.DeletePreferencesAsync(_declaration);
+        await PreferenceManager.CreateRangeAsync(preferences);
 
         NavigationManager.NavigateTo($"/m/{_declaration.MeetingId}");
     }

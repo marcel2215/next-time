@@ -25,5 +25,5 @@ public sealed class Declaration
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
-    public ICollection<Suggestion> Suggestions { get; } = [];
+    public ICollection<Preference> Preferences { get; } = [];
 }
