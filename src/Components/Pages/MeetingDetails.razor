@@ -37,7 +37,12 @@
     <div class="py-4">
         <div class="w-full h-1 bg-gray-100 rounded-xl" />
     </div>
-    @if (!_isAnyDeclaration)
+    @if (_isAnyDeclaration && _recommendedTime != null)
+    {
+        <h3 class="text-center text-gray-500 font-bold">RECOMMENDED TIME</h3>
+        <p class="text-center text-2xl font-bold">@_recommendedTime.Value.ToString("dddd, dd MMMM HH:mm")</p>
+    }
+    else
     {
         <p>No one has suggested a time for this event yet.</p>
     }
@@ -61,6 +66,8 @@
     private Declaration? _userDeclaration;
 
     private bool _isAnyDeclaration;
+
+    private DateTimeOffset? _recommendedTime;
 
     [Parameter]
     public string? MeetingId { get; set; }
@@ -86,6 +93,25 @@
         {
             _userDeclaration = await MeetingManager.GetDeclarationAsync(_meeting, User.Id);
         }
+
+        _recommendedTime = await GetRecommendedTime();
+    }
+
+    private async Task<DateTimeOffset> GetRecommendedTime()
+    {
+        if (_meeting == null)
+        {
+            throw new InvalidOperationException("Meeting is not set.");
+        }
+
+        var recommendedTime = await MeetingManager.GetDeclarations(_meeting)
+        .SelectMany(d => d.Suggestions)
+        .GroupBy(s => s.SuggestedTime)
+        .OrderByDescending(g => g.Count())
+        .Select(g => g.Key)
+        .FirstOrDefaultAsync();
+
+        return recommendedTime;
     }
 
     private async Task NavigateToSuggestionCreation()
