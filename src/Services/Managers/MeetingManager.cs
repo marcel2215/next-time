@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using NextTime.Entities;
 
 namespace NextTime.Services.Managers;
@@ -20,6 +21,11 @@ public sealed class MeetingManager(ApplicationDbContext context)
     public IQueryable<Declaration> GetDeclarations(Meeting meeting)
     {
         return context.Declarations.Where(d => d.MeetingId == meeting.Id);
+    }
+
+    public async Task<Declaration?> GetDeclarationAsync(Meeting meeting, Guid userId)
+    {
+        return await context.Declarations.FirstOrDefaultAsync(d => d.MeetingId == meeting.Id && d.UserId == userId);
     }
 
     public async Task UpdateAsync(Meeting meeting)
