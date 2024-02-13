@@ -5,9 +5,12 @@
 
 @if (_meeting == null || _declarations == null)
 {
+    <PageTitle>NextTime - Meeting Details</PageTitle>
     <LoadingScreen />
     return;
 }
+
+<PageTitle>NextTime - @_meeting.Title</PageTitle>
 
 <div class="text-center space-y-4">
     <h1 class="font-extrabold">NEXT<span class="text-amber-500">TIME</span></h1>
