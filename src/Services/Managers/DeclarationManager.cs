@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using NextTime.Entities;
 
 namespace NextTime.Services.Managers;
@@ -32,5 +33,10 @@ public sealed class DeclarationManager(ApplicationDbContext context)
     {
         context.Declarations.Remove(declaration);
         await context.SaveChangesAsync();
+    }
+
+    public async Task DeleteSuggestionsAsync(Declaration declaration)
+    {
+        await context.Suggestions.Where(s => s.DeclarationId == declaration.Id).ExecuteDeleteAsync();
     }
 }
