@@ -1,4 +1,4 @@
-@page "/create-meeting"
+@page "/new-meeting"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
 
@@ -85,7 +85,7 @@
             }
 
             await MeetingManager.CreateAsync(Meeting);
-            NavigationManager.NavigateTo($"/meeting/{Meeting.Id}");
+            NavigationManager.NavigateTo($"/m/{Meeting.Id}");
         }
     }
 }

@@ -39,11 +39,11 @@
 
     private void NavigateToMeetingCreation()
     {
-        NavigationManager.NavigateTo("/create-meeting");
+        NavigationManager.NavigateTo("/new-meeting");
     }
 
     private void NavigateToMeetingDetails(Guid id)
     {
-        NavigationManager.NavigateTo($"/meeting/{id}");
+        NavigationManager.NavigateTo($"/m/{id}");
     }
 }

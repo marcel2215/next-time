@@ -1,4 +1,4 @@
-@page "/meeting/{id}"
+@page "/m/{meetingId}"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
 @inject DeclarationManager DeclarationManager
@@ -45,7 +45,7 @@
 
 @code {
     [Parameter]
-    public string? Id { get; set; }
+    public string? MeetingId { get; set; }
 
     [CascadingParameter]
     public ApplicationUser? User { get; set; }
@@ -56,9 +56,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (Guid.TryParse(Id, out var id))
+        if (Guid.TryParse(MeetingId, out var meetingGuid))
         {
-            Meeting = await MeetingManager.FindByIdAsync(id);
+            Meeting = await MeetingManager.FindByIdAsync(meetingGuid);
         }
 
         if (Meeting == null)
