@@ -3,7 +3,7 @@
 @inject MeetingManager MeetingManager
 @inject DeclarationManager DeclarationManager
 
-@if (_meeting == null || _declarations == null)
+@if (_meeting == null)
 {
     <PageTitle>NextTime - Meeting Details</PageTitle>
     <LoadingScreen />
@@ -37,7 +37,7 @@
     <div class="py-4">
         <div class="w-full h-1 bg-gray-100 rounded-xl" />
     </div>
-    @if (_declarations.Count == 0)
+    @if (!_isAnyDeclaration)
     {
         <p>No one has suggested a time for this event yet.</p>
     }
@@ -58,9 +58,9 @@
 @code {
     private Meeting? _meeting;
 
-    private List<Declaration> _declarations = [];
-
     private Declaration? _userDeclaration;
+
+    private bool _isAnyDeclaration;
 
     [Parameter]
     public string? MeetingId { get; set; }
@@ -81,8 +81,11 @@
             return;
         }
 
-        _declarations = await MeetingManager.GetDeclarations(_meeting).ToListAsync();
-        _userDeclaration = _declarations.FirstOrDefault(d => d.UserId == User?.Id);
+        _isAnyDeclaration = await MeetingManager.GetDeclarations(_meeting).AnyAsync();
+        if (_isAnyDeclaration && User != null)
+        {
+            _userDeclaration = await MeetingManager.GetDeclarationAsync(_meeting, User.Id);
+        }
     }
 
     private async Task NavigateToSuggestionCreation()
