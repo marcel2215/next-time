@@ -4,8 +4,8 @@
 
 <div class="space-y-4">
     <h1 class="text-4xl font-bold">Create Meeting</h1>
-    <NTTextBox Label="Title" Placeholder="My Super Party" @bind-Text="Meeting.Title" />
-    <NTTextArea Label="Description" Placeholder="Here you can add more details about the event..." @bind-Text="Meeting.Description" />
+    <NTTextBox Label="Title" Placeholder="My Super Party" @bind-Text="_meeting.Title" />
+    <NTTextArea Label="Description" Placeholder="Here you can add more details about the event..." @bind-Text="_meeting.Description" />
     <div>
         <label class="pl-2 text-sm font-bold">Estimated Duration</label>
         <div class="mt-1 space-y-2">
@@ -24,50 +24,51 @@
 </div>
 
 @code {
+    private readonly Meeting _meeting = new(Guid.Empty, string.Empty);
+
     [CascadingParameter]
     public required ApplicationUser User { get; init; }
 
-    public Meeting Meeting { get; set; } = new(Guid.Empty, string.Empty);
-
     private bool IsEstDuration1Hour
     {
-        get => Meeting.Duration == TimeSpan.FromHours(1);
-        set => Meeting.Duration = value ? TimeSpan.FromHours(1) : Meeting.Duration;
+        get => _meeting.Duration == TimeSpan.FromHours(1);
+        set => _meeting.Duration = value ? TimeSpan.FromHours(1) : _meeting.Duration;
     }
+
     private bool IsEstDuration2To3Hours
     {
-        get => Meeting.Duration == TimeSpan.FromHours(3);
-        set => Meeting.Duration = value ? TimeSpan.FromHours(3) : Meeting.Duration;
+        get => _meeting.Duration == TimeSpan.FromHours(3);
+        set => _meeting.Duration = value ? TimeSpan.FromHours(3) : _meeting.Duration;
     }
 
     private bool IsEstDuration4To6Hours
     {
-        get => Meeting.Duration == TimeSpan.FromHours(6);
-        set => Meeting.Duration = value ? TimeSpan.FromHours(6) : Meeting.Duration;
+        get => _meeting.Duration == TimeSpan.FromHours(6);
+        set => _meeting.Duration = value ? TimeSpan.FromHours(6) : _meeting.Duration;
     }
 
     private bool IsEstDuration6To8Hours
     {
-        get => Meeting.Duration == TimeSpan.FromHours(8);
-        set => Meeting.Duration = value ? TimeSpan.FromHours(8) : Meeting.Duration;
+        get => _meeting.Duration == TimeSpan.FromHours(8);
+        set => _meeting.Duration = value ? TimeSpan.FromHours(8) : _meeting.Duration;
     }
 
     private bool IsEstDuration8To12Hours
     {
-        get => Meeting.Duration == TimeSpan.FromHours(12);
-        set => Meeting.Duration = value ? TimeSpan.FromHours(12) : Meeting.Duration;
+        get => _meeting.Duration == TimeSpan.FromHours(12);
+        set => _meeting.Duration = value ? TimeSpan.FromHours(12) : _meeting.Duration;
     }
 
     private bool IsEstDurationEntireDay
     {
-        get => Meeting.Duration == TimeSpan.FromDays(1);
-        set => Meeting.Duration = value ? TimeSpan.FromDays(1) : Meeting.Duration;
+        get => _meeting.Duration == TimeSpan.FromDays(1);
+        set => _meeting.Duration = value ? TimeSpan.FromDays(1) : _meeting.Duration;
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Meeting.UserId = User.Id;
+        _meeting.UserId = User.Id;
     }
 
     private void NavigateToHomePage()
@@ -77,15 +78,15 @@
 
     private async Task CreateMeetingAsync()
     {
-        if (Meeting != null)
+        if (_meeting != null)
         {
-            if (string.IsNullOrWhiteSpace(Meeting.Title))
+            if (string.IsNullOrWhiteSpace(_meeting.Title))
             {
-                Meeting.Title = "Untitled Meeting";
+                _meeting.Title = "Untitled Meeting";
             }
 
-            await MeetingManager.CreateAsync(Meeting);
-            NavigationManager.NavigateTo($"/m/{Meeting.Id}");
+            await MeetingManager.CreateAsync(_meeting);
+            NavigationManager.NavigateTo($"/m/{_meeting.Id}");
         }
     }
 }

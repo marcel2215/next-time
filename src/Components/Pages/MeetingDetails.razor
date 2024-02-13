@@ -3,7 +3,7 @@
 @inject MeetingManager MeetingManager
 @inject DeclarationManager DeclarationManager
 
-@if (Meeting == null)
+@if (_meeting == null || _declarations == null)
 {
     <LoadingScreen />
     return;
@@ -11,30 +11,30 @@
 
 <div class="text-center space-y-4">
     <h1 class="font-extrabold">NEXT<span class="text-amber-500">TIME</span></h1>
-    <h2 class="text-4xl font-bold">@Meeting.Title</h2>
+    <h2 class="text-4xl font-bold">@_meeting.Title</h2>
     <div class="space-x-2 flex justify-center items-center">
         <img src="/img/clock.svg" alt="Clock" height="24" width="24" />
-        @if (Meeting.Duration.TotalDays >= 1)
+        @if (_meeting.Duration.TotalDays >= 1)
         {
             <p>Entire Day</p>
         }
-        else if (Meeting.Duration.TotalHours > 1)
+        else if (_meeting.Duration.TotalHours > 1)
         {
-            <p>Around @(Meeting.Duration.Hours - 2)-@(Meeting.Duration.Hours) Hours</p>
+            <p>Around @(_meeting.Duration.Hours - 2)-@(_meeting.Duration.Hours) Hours</p>
         }
         else
         {
             <p>Around 1 Hour</p>
         }
     </div>
-    @if (!string.IsNullOrWhiteSpace(Meeting.Description))
+    @if (!string.IsNullOrWhiteSpace(_meeting.Description))
     {
-        <p>@Meeting.Description</p>
+        <p>@_meeting.Description</p>
     }
     <div class="py-4">
         <div class="w-full h-1 bg-gray-100 rounded-xl" />
     </div>
-    @if (Declarations.Count == 0)
+    @if (_declarations.Count == 0)
     {
         <p>No one has suggested a time for this event yet.</p>
     }
@@ -44,43 +44,43 @@
 </div>
 
 @code {
+    private Meeting? _meeting;
+
+    private List<Declaration> _declarations = [];
+
     [Parameter]
     public string? MeetingId { get; set; }
 
     [CascadingParameter]
     public ApplicationUser? User { get; set; }
 
-    private Meeting? Meeting { get; set; }
-
-    private List<Declaration> Declarations { get; set; } = [];
-
     protected override async Task OnInitializedAsync()
     {
         if (Guid.TryParse(MeetingId, out var meetingGuid))
         {
-            Meeting = await MeetingManager.FindByIdAsync(meetingGuid);
+            _meeting = await MeetingManager.FindByIdAsync(meetingGuid);
         }
 
-        if (Meeting == null)
+        if (_meeting == null)
         {
             NavigationManager.NavigateTo("/");
             return;
         }
 
-        Declarations = await MeetingManager.GetDeclarations(Meeting).ToListAsync();
+        _declarations = await MeetingManager.GetDeclarations(_meeting).ToListAsync();
     }
 
     private async Task NavigateToSuggestionCreation()
     {
-        if (Meeting == null || User == null)
+        if (_meeting == null || User == null)
         {
             return;
         }
 
-        var declaration = await MeetingManager.GetDeclarationAsync(Meeting, User.Id);
+        var declaration = await MeetingManager.GetDeclarationAsync(_meeting, User.Id);
         if (declaration == null)
         {
-            declaration = new Declaration(Meeting.Id, User.Id);
+            declaration = new Declaration(_meeting.Id, User.Id);
             await DeclarationManager.CreateAsync(declaration);
         }
 
