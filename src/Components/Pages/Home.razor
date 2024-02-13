@@ -5,6 +5,12 @@
 
 <PageTitle>NextTime</PageTitle>
 
+@if (User == null)
+{
+    <LoadingScreen />
+    return;
+}
+
 <div>
     <h1 class="text-5xl sm:text-6xl text-center font-bold">Next<span class="text-amber-500">Time</span></h1>
     <div class="mt-8 p:mt-12 space-y-4">
@@ -30,11 +36,14 @@
     private List<Meeting> _meetings = [];
 
     [CascadingParameter]
-    public required ApplicationUser User { get; init; }
+    public ApplicationUser? User { get; init; }
 
     protected override async Task OnInitializedAsync()
     {
-        _meetings = await UserManager.GetMeetings(User).ToListAsync();
+        if (User != null)
+        {
+            _meetings = await UserManager.GetMeetings(User).ToListAsync();
+        }
     }
 
     private void NavigateToMeetingCreation()
