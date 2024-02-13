@@ -548,10 +548,6 @@ video {
   position: static;
 }
 
-.m-8 {
-  margin: 2rem;
-}
-
 .ml-1 {
   margin-left: 0.25rem;
 }
@@ -564,8 +560,8 @@ video {
   margin-top: 2rem;
 }
 
-.mt-4 {
-  margin-top: 1rem;
+.mt-24 {
+  margin-top: 6rem;
 }
 
 .flex {
@@ -580,12 +576,24 @@ video {
   height: 0.25rem;
 }
 
+.h-full {
+  height: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
 
 .w-full {
   width: 100%;
+}
+
+.grow {
+  flex-grow: 1;
 }
 
 @keyframes pulse {
@@ -703,11 +711,6 @@ video {
   padding: 2rem;
 }
 
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -715,10 +718,6 @@ video {
 
 .pl-2 {
   padding-left: 0.5rem;
-}
-
-.pt-8 {
-  padding-top: 2rem;
 }
 
 .pt-4 {
