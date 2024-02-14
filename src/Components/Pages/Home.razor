@@ -2,6 +2,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject ApplicationUserManager UserManager
+@inject MeetingManager MeetingManager
 
 <PageTitle>NextTime</PageTitle>
 
@@ -11,29 +12,56 @@
     return;
 }
 
-<div>
+<div class="space-y-4">
     <h1 class="text-5xl sm:text-6xl text-center font-bold">Next<span class="text-amber-500">Time</span></h1>
-    <div class="mt-8 p:mt-12 space-y-4">
-        @if (_meetings.Count == 0)
+    <div class="pt-4 space-y-4">
+        <h2 class="text-center text-gray-500 font-bold">CREATED BY ME</h2>
+        @if (_createdMeetings.Count == 0)
         {
             <p class="text-center text-gray-500">You haven't created any meetings.</p>
         }
-        else
+        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToMeetingCreation">Create Meeting</NTButton>
+        @if (_createdMeetings.Count >= 1)
         {
-            <h2 class="text-center text-gray-500 font-bold">CREATED MEETINGS</h2>
-            @foreach (var meeting in _meetings)
+            <div class="space-y-2">
+                @foreach (var meeting in _createdMeetings)
+                {
+                    <NTButton Clicked="@(() => NavigateToMeetingDetails(meeting.Code))">@meeting.Title</NTButton>
+                }
+            </div>
+        }
+    </div>
+    <div class="py-4">
+        <div class="w-full h-1 bg-gray-100 rounded-xl" />
+    </div>
+    <div class="space-y-4">
+        <h2 class="text-center text-gray-500 font-bold">SHARED BY OTHERS</h2>
+        @if (_sharedMeetings.Count == 0)
+        {
+            <p class="text-center text-gray-500">You aren't participating in any meetings.</p>
+        }
+        <div class="space-y-2">
+            <NTTextBox Label="Meeting Code" Placeholder="ABCD1234" @bind-Text="_meetingCode" />
+            <NTButton Style="ButtonStyle.Accent" IsDisabled="ValidateMeetingCode() == null" Clicked="JoinMeetingAsync">Join Meeting</NTButton>
+        </div>
+    </div>
+    @if (_sharedMeetings.Count >= 1)
+    {
+        <div class="space-y-2">
+            @foreach (var meeting in _sharedMeetings)
             {
                 <NTButton Clicked="@(() => NavigateToMeetingDetails(meeting.Code))">@meeting.Title</NTButton>
             }
-        }
-    </div>
-    <div class="mt-8">
-        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToMeetingCreation">Create Meeting</NTButton>
-    </div>
+        </div>
+    }
 </div>
 
 @code {
-    private List<Meeting> _meetings = [];
+    private List<Meeting> _createdMeetings = [];
+
+    private List<Meeting> _sharedMeetings = [];
+
+    private string _meetingCode = string.Empty;
 
     [CascadingParameter]
     public ApplicationUser? User { get; init; }
@@ -42,7 +70,8 @@
     {
         if (User != null)
         {
-            _meetings = await UserManager.GetMeetings(User).ToListAsync();
+            _createdMeetings = await UserManager.GetCreatedMeetings(User).ToListAsync();
+            _sharedMeetings = await UserManager.GetSharedMeetings(User).ToListAsync();
         }
     }
 
@@ -54,5 +83,47 @@
     private void NavigateToMeetingDetails(string meetingCode)
     {
         NavigationManager.NavigateTo($"/m/{meetingCode}");
+    }
+
+    private string? ValidateMeetingCode()
+    {
+        var codeInput = _meetingCode.Trim().ToLowerInvariant();
+        var indexOfUrlCode = codeInput.IndexOf("m/") + 2;
+
+        if (indexOfUrlCode != 1)
+        {
+            var indexOfUrlCodeEnd = indexOfUrlCode + 7;
+            if (indexOfUrlCodeEnd >= codeInput.Length)
+            {
+                return null;
+            }
+
+            var code = codeInput.Substring(indexOfUrlCode, 8);
+            code = new string(code.Where(char.IsLetterOrDigit).ToArray());
+
+            return code.Length == 8 ? code : null;
+        }
+        else
+        {
+            var code = new string(codeInput.Where(char.IsLetterOrDigit).ToArray());
+            return code.Length == 8 ? code : null;
+        }
+    }
+
+    private async Task JoinMeetingAsync()
+    {
+        var code = ValidateMeetingCode();
+        if (code == null)
+        {
+            return;
+        }
+
+        var meeting = await MeetingManager.FindByCodeAsync(code);
+        if (meeting == null)
+        {
+            return;
+        }
+
+        NavigateToMeetingDetails(meeting.Code);
     }
 }

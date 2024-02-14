@@ -556,8 +556,8 @@ video {
   margin-top: 0.25rem;
 }
 
-.mt-8 {
-  margin-top: 2rem;
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .flex {
@@ -578,10 +578,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.shrink {
-  flex-shrink: 1;
 }
 
 .grow {

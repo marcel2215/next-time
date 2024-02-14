@@ -36,9 +36,14 @@ public sealed class ApplicationUserManager(ApplicationDbContext context, UserMan
         return await userManager.GetUserAsync(principal);
     }
 
-    public IQueryable<Meeting> GetMeetings(ApplicationUser user)
+    public IQueryable<Meeting> GetCreatedMeetings(ApplicationUser user)
     {
         return context.Meetings.Where(m => m.UserId == user.Id);
+    }
+
+    public IQueryable<Meeting> GetSharedMeetings(ApplicationUser user)
+    {
+        return context.Meetings.Where(m => m.UserId != user.Id && m.Preferences.Any(p => p.UserId == user.Id));
     }
 
     public async Task<ApplicationUser?> FindByIdAsync(Guid id)
