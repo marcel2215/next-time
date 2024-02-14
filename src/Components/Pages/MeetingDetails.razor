@@ -78,8 +78,8 @@
     @if (User.Id == _meeting.UserId)
     {
         <div class="flex space-x-4">
-            <NTButton Clicked="EditMeeting">Edit Meeting</NTButton>
-            <NTButton Clicked="DeleteMeetingAsync">Delete Meeting</NTButton>
+            <NTButton Clicked="EditMeeting">Edit</NTButton>
+            <NTButton Style="ButtonStyle.Danger" Clicked="DeleteMeetingAsync">Delete</NTButton>
         </div>
     }
 </div>
