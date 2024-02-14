@@ -1,6 +1,7 @@
 @page "/m/{meetingCode}"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
+@inject IJSRuntime JSRuntime
 
 @if (_meeting == null)
 {
@@ -67,6 +68,13 @@
             }
         </NTButton>
     </div>
+    <div class="py-4">
+        <div class="w-full h-1 bg-gray-100 rounded-xl" />
+    </div>
+    <div class="flex space-x-4">
+        <button class="w-full p-2 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 border shadow-sm hover:scale-105 active:scale-95 font-bold transition-all ease-in-out duration-300 select-none" onclick="navigator.clipboard.writeText('@_meeting.Code')">Copy Link</button>
+        <NTButton Clicked="ShareMeetingLinkAsync">Share Link</NTButton>
+    </div>
 </div>
 
 @code {
@@ -117,6 +125,14 @@
         if (_meeting != null)
         {
             NavigationManager.NavigateTo($"/m/{_meeting.Code}/edit-preferences");
+        }
+    }
+
+    private async Task ShareMeetingLinkAsync()
+    {
+        if (_meeting != null)
+        {
+            await JSRuntime.InvokeVoidAsync("shareLink", _meeting.Title, $"/m/{_meeting.Code}");
         }
     }
 }
