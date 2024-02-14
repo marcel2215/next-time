@@ -16,7 +16,7 @@
     <div class="flex justify-center">
         <h1 class="font-extrabold hover:scale-105 active:scale-95 transition-all ease-in-out duration-300"><a href="/">NEXT<span class="text-amber-500">TIME</span></a></h1>
     </div>
-    <h2 class="text-4xl font-bold">@_meeting.Title</h2>
+    <h2 class="text-4xl font-bold break-words">@_meeting.Title</h2>
     <div class="space-x-2 flex justify-center items-center">
         <img src="/img/clock.svg" alt="Clock" height="24" width="24" />
         @if (_meeting.Duration.TotalDays >= 1)
@@ -42,7 +42,7 @@
     </div>
     @if (!string.IsNullOrWhiteSpace(_meeting.Description))
     {
-        <p>@_meeting.Description</p>
+        <p class="break-words">@_meeting.Description</p>
     }
     <div class="py-4">
         <div class="w-full h-1 bg-gray-100 rounded-xl" />

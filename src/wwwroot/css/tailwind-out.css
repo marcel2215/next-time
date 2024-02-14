@@ -652,6 +652,10 @@ video {
   margin-bottom: calc(2rem * var(--tw-space-y-reverse));
 }
 
+.break-words {
+  overflow-wrap: break-word;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
 }
