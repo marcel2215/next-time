@@ -1,4 +1,4 @@
-@page "/meetings/{meetingCode}/edit-preferences"
+@page "/m/{meetingCode}/edit-preferences"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
 @inject PreferenceManager PreferenceManager
@@ -204,6 +204,6 @@
 
     void NavigateToMeetingDetails()
     {
-        NavigationManager.NavigateTo($"/meetings/{MeetingCode}");
+        NavigationManager.NavigateTo($"/m/{MeetingCode}");
     }
 }

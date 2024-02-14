@@ -1,4 +1,4 @@
-@page "/meetings/{meetingCode}"
+@page "/m/{meetingCode}"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
 
@@ -116,7 +116,7 @@
     {
         if (_meeting != null)
         {
-            NavigationManager.NavigateTo($"/meetings/{_meeting.Code}/edit-preferences");
+            NavigationManager.NavigateTo($"/m/{_meeting.Code}/edit-preferences");
         }
     }
 }
