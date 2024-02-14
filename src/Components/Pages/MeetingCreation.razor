@@ -88,7 +88,7 @@
             }
 
             await MeetingManager.CreateAsync(_meeting);
-            NavigationManager.NavigateTo($"/meetings/{_meeting.Id}");
+            NavigationManager.NavigateTo($"/meetings/{_meeting.Code}");
         }
     }
 }

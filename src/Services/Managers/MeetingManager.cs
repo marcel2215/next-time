@@ -18,6 +18,11 @@ public sealed class MeetingManager(ApplicationDbContext context)
         return await context.Meetings.FindAsync(id);
     }
 
+    public async Task<Meeting?> FindByCodeAsync(string code)
+    {
+        return await context.Meetings.FirstOrDefaultAsync(m => m.Code == code);
+    }
+
     public IQueryable<Preference> GetPreferences(Guid meetingId)
     {
         return context.Preferences.Where(p => p.MeetingId == meetingId);

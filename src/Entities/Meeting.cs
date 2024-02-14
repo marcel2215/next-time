@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using NextTime.Utilities;
 
 namespace NextTime.Entities;
 
@@ -22,6 +23,8 @@ public sealed class Meeting
     public required string Title { get; set; }
 
     public string Description { get; set; } = string.Empty;
+
+    public string Code { get; set; } = RandomGenerator.GenerateMeetingCode();
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 

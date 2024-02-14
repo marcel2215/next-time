@@ -1,4 +1,4 @@
-@page "/meetings/{meetingId}"
+@page "/meetings/{meetingCode}"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
 
@@ -79,16 +79,16 @@
     private bool _hasUserAnyPreferences;
 
     [Parameter]
-    public string? MeetingId { get; set; }
+    public string? MeetingCode { get; set; }
 
     [CascadingParameter]
     public ApplicationUser? User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (Guid.TryParse(MeetingId, out var meetingGuid))
+        if (!string.IsNullOrWhiteSpace(MeetingCode) && MeetingCode.Length == 8)
         {
-            _meeting = await MeetingManager.FindByIdAsync(meetingGuid);
+            _meeting = await MeetingManager.FindByCodeAsync(MeetingCode);
         }
 
         if (_meeting == null || User == null)
