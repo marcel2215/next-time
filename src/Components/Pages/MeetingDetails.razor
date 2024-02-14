@@ -78,8 +78,8 @@
     @if (User.Id == _meeting.UserId)
     {
         <div class="flex space-x-4">
-            <NTButton Clicked="EditMeeting">Edit</NTButton>
-            <NTButton Style="ButtonStyle.Danger" Clicked="DeleteMeetingAsync">Delete</NTButton>
+            <NTButton Clicked="NavigateToEdition">Edit</NTButton>
+            <NTButton Style="ButtonStyle.Danger" Clicked="NavigateToDeletion">Delete</NTButton>
         </div>
     }
 </div>
@@ -143,20 +143,19 @@
         }
     }
 
-    private void EditMeeting()
+    private void NavigateToEdition()
     {
-        if (_meeting != null && User?.Id == _meeting.UserId)
+        if (_meeting != null && User != null && _meeting.UserId == User.Id)
         {
             NavigationManager.NavigateTo($"/m/{_meeting.Code}/edit");
         }
     }
 
-    private async Task DeleteMeetingAsync()
+    private void NavigateToDeletion()
     {
-        if (_meeting != null && User?.Id == _meeting.UserId)
+        if (_meeting != null && User != null && _meeting.UserId == User.Id)
         {
-            await MeetingManager.DeleteAsync(_meeting);
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo($"/m/{_meeting.Code}/delete");
         }
     }
 }

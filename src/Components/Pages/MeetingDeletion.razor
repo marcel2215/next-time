@@ -1,0 +1,69 @@
+@page "/m/{meetingCode}/delete"
+@inject NavigationManager NavigationManager
+@inject MeetingManager MeetingManager
+
+@if (_meeting == null || User == null)
+{
+    <LoadingScreen />
+    return;
+}
+
+@if (_meeting.UserId != User.Id)
+{
+    <div>
+        <h1 class="text-2xl font-bold">Access Denied</h1>
+        <p>You do not have permission to delete this meeting.</p>
+    </div>
+    return;
+}
+
+<div class="space-y-8">
+    <div class="space-y-4">
+        <h1 class="text-4xl font-bold break-words">Delete "@_meeting.Title"?</h1>
+        <p>Are you sure you want to delete this meeting? This action cannot be undone.</p>
+    </div>
+    <div class="flex space-x-4">
+        <NTButton Clicked="Cancel">Cancel</NTButton>
+        <NTButton Style="ButtonStyle.Danger" Clicked="DeleteAsync">Delete</NTButton>
+    </div>
+</div>
+
+@code {
+    private Meeting? _meeting;
+
+    [Parameter]
+    public string? MeetingCode { get; set; }
+
+    [CascadingParameter]
+    public ApplicationUser? User { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (!string.IsNullOrWhiteSpace(MeetingCode) && MeetingCode.Length == 8)
+        {
+            _meeting = await MeetingManager.FindByCodeAsync(MeetingCode);
+        }
+
+        if (_meeting == null || User == null || _meeting.UserId != User.Id)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private async Task DeleteAsync()
+    {
+        if (_meeting != null && User != null && _meeting.UserId == User.Id)
+        {
+            await MeetingManager.DeleteAsync(_meeting);
+        }
+
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo($"/m/{_meeting?.Code}");
+    }
+}
