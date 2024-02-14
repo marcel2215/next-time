@@ -214,6 +214,10 @@ namespace NextTime.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTimeOffset>("CreationTime")
                         .HasColumnType("TEXT");
 

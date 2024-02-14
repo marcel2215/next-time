@@ -11,7 +11,7 @@ using NextTime;
 namespace NextTime.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240214004801_InitialCreate")]
+    [Migration("20240214123710_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -215,6 +215,10 @@ namespace NextTime.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset>("CreationTime")
