@@ -34,9 +34,10 @@
             }
         }
     </div>
+    <NTButton Clicked="LoadMoreDaysAsync">Show more days</NTButton>
     <div class="space-y-4">
-        <NTButton Clicked="LoadMoreDaysAsync">Show more days</NTButton>
         <NTButton Style="ButtonStyle.Accent" Clicked="SavePreferencesAsync">Save Preferences</NTButton>
+        <NTButton Clicked="NavigateToMeetingDetails">Cancel Changes</NTButton>
     </div>
 </div>
 
@@ -186,6 +187,11 @@
         await MeetingManager.DeletePreferencesAsync(_meeting.Id, User.Id);
         await PreferenceManager.CreateRangeAsync(preferences);
 
+        NavigateToMeetingDetails();
+    }
+
+    void NavigateToMeetingDetails()
+    {
         NavigationManager.NavigateTo($"/meetings/{MeetingId}");
     }
 }
