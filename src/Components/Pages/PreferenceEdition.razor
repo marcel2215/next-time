@@ -185,7 +185,7 @@
                 isAnySelected = true;
             }
 
-            if (!isAnySelected)
+            if (!isAnySelected && selectableDay.IsLastActionSelect)
             {
                 preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(8)));
                 preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(10)));
