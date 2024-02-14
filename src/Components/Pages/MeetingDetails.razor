@@ -20,7 +20,15 @@
         {
             <p>Entire Day</p>
         }
-        else if (_meeting.Duration.TotalHours > 1)
+        else if (_meeting.Duration.TotalHours >= 12)
+        {
+            <p>Around @(_meeting.Duration.Hours - 4)-@(_meeting.Duration.Hours) Hours</p>
+        }
+        else if (_meeting.Duration.TotalHours >= 6)
+        {
+            <p>Around @(_meeting.Duration.Hours - 2)-@(_meeting.Duration.Hours) Hours</p>
+        }
+         else if (_meeting.Duration.TotalHours >= 3)
         {
             <p>Around @(_meeting.Duration.Hours - 1)-@(_meeting.Duration.Hours) Hours</p>
         }
