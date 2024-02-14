@@ -11,9 +11,11 @@
     return;
 }
 
-<div class="space-y-4">
-    <h1 class="text-4xl font-bold">When can you come to this event?</h1>
-    <p>Choose all days that fit you. NextTime will find the best date for all participants.</p>
+<div class="space-y-8">
+    <div class="space-y-4">
+        <h1 class="text-4xl font-bold">When can you come to this event?</h1>
+        <p>Choose all days that fit you. NextTime will find the best date for all participants.</p>
+    </div>
     <div class="space-y-2">
         @foreach (var selectableDay in _selectableDays)
         {
@@ -32,8 +34,10 @@
             }
         }
     </div>
-    <NTButton Clicked="LoadMoreDaysAsync">Show more days</NTButton>
-    <NTButton Style="ButtonStyle.Accent" Clicked="SavePreferencesAsync">Save Preferences</NTButton>
+    <div class="space-y-4">
+        <NTButton Clicked="LoadMoreDaysAsync">Show more days</NTButton>
+        <NTButton Style="ButtonStyle.Accent" Clicked="SavePreferencesAsync">Save Preferences</NTButton>
+    </div>
 </div>
 
 @code {
