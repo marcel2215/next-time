@@ -11,5 +11,5 @@ public sealed class ApplicationUser : IdentityUser<Guid>
 
     public ICollection<Meeting> Meetings { get; } = [];
 
-    public ICollection<Declaration> Declarations { get; } = [];
+    public ICollection<Preference> Preferences { get; } = [];
 }

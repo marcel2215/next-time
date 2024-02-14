@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using NextTime.Constants;
 using NextTime.Entities;
 using NextTime.Exceptions;
@@ -40,16 +39,6 @@ public sealed class ApplicationUserManager(ApplicationDbContext context, UserMan
     public IQueryable<Meeting> GetMeetings(ApplicationUser user)
     {
         return context.Meetings.Where(m => m.UserId == user.Id);
-    }
-
-    public IQueryable<Declaration> GetDeclarations(ApplicationUser user)
-    {
-        return context.Declarations.Where(d => d.UserId == user.Id);
-    }
-
-    public async Task<Declaration?> GetDeclarationAsync(ApplicationUser user, Guid meetingId)
-    {
-        return await context.Declarations.FirstOrDefaultAsync(d => d.UserId == user.Id && d.MeetingId == meetingId);
     }
 
     public async Task<ApplicationUser?> FindByIdAsync(Guid id)

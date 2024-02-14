@@ -1,7 +1,6 @@
-@page "/m/{meetingId}"
+@page "/meetings/{meetingId}"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
-@inject DeclarationManager DeclarationManager
 
 @if (_meeting == null)
 {
@@ -37,7 +36,7 @@
     <div class="py-4">
         <div class="w-full h-1 bg-gray-100 rounded-xl" />
     </div>
-    @if (_isAnyDeclaration && _recommendedTime != null)
+    @if (_hasAnyPreferences && _recommendedTime != null)
     {
         <h3 class="text-center text-gray-500 font-bold">RECOMMENDED TIME</h3>
         <p class="text-center text-2xl font-bold">@_recommendedTime.Value.ToString("dddd, dd MMMM HH:mm")</p>
@@ -47,14 +46,14 @@
         <p>No one has suggested a time for this event yet.</p>
     }
     <div class="pt-4">
-        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToPreferenceCreation">
-            @if (_userDeclaration == null)
+        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToPreferenceEdition">
+            @if (_hasUserAnyPreferences)
             {
-                <span>Add My Preference</span>
+                <span>Edit My Preferences</span>
             }
             else
             {
-                <span>Edit My Preference</span>
+                <span>Add My Preferences</span>
             }
         </NTButton>
     </div>
@@ -63,11 +62,11 @@
 @code {
     private Meeting? _meeting;
 
-    private Declaration? _userDeclaration;
-
-    private bool _isAnyDeclaration;
-
     private DateTimeOffset? _recommendedTime;
+
+    private bool _hasAnyPreferences;
+
+    private bool _hasUserAnyPreferences;
 
     [Parameter]
     public string? MeetingId { get; set; }
@@ -82,51 +81,32 @@
             _meeting = await MeetingManager.FindByIdAsync(meetingGuid);
         }
 
-        if (_meeting == null)
+        if (_meeting == null || User == null)
         {
             NavigationManager.NavigateTo("/");
             return;
         }
 
-        _isAnyDeclaration = await MeetingManager.GetDeclarations(_meeting).AnyAsync();
-        if (_isAnyDeclaration && User != null)
-        {
-            _userDeclaration = await MeetingManager.GetDeclarationAsync(_meeting, User.Id);
-        }
+        _hasAnyPreferences = await MeetingManager.GetPreferences(_meeting.Id).AnyAsync();
+        _hasUserAnyPreferences = await MeetingManager.GetPreferences(_meeting.Id, User.Id).AnyAsync();
 
-        _recommendedTime = await GetRecommendedTime();
+        if (_hasAnyPreferences)
+        {
+            _recommendedTime = await MeetingManager
+            .GetPreferences(_meeting.Id)
+            .AsNoTracking()
+            .GroupBy(s => s.PreferredTime)
+            .OrderByDescending(g => g.Count())
+            .Select(g => g.Key)
+            .FirstOrDefaultAsync();
+        }
     }
 
-    private async Task<DateTimeOffset> GetRecommendedTime()
+    private void NavigateToPreferenceEdition()
     {
-        if (_meeting == null)
+        if (_meeting != null)
         {
-            throw new InvalidOperationException("Meeting is not set.");
+            NavigationManager.NavigateTo($"/meetings/{_meeting.Id}/edit-preferences");
         }
-
-        var recommendedTime = await MeetingManager.GetDeclarations(_meeting)
-        .SelectMany(d => d.Preferences)
-        .GroupBy(s => s.SuggestedTime)
-        .OrderByDescending(g => g.Count())
-        .Select(g => g.Key)
-        .FirstOrDefaultAsync();
-
-        return recommendedTime;
-    }
-
-    private async Task NavigateToPreferenceCreation()
-    {
-        if (_meeting == null || User == null)
-        {
-            return;
-        }
-
-        if (_userDeclaration == null)
-        {
-            _userDeclaration = new Declaration(_meeting.Id, User.Id);
-            await DeclarationManager.CreateAsync(_userDeclaration);
-        }
-
-        NavigationManager.NavigateTo($"/d/{_userDeclaration.Id}/add-preference");
     }
 }

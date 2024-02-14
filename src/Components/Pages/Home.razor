@@ -51,8 +51,8 @@
         NavigationManager.NavigateTo("/new-meeting");
     }
 
-    private void NavigateToMeetingDetails(Guid id)
+    private void NavigateToMeetingDetails(Guid meetingId)
     {
-        NavigationManager.NavigateTo($"/m/{id}");
+        NavigationManager.NavigateTo($"/meetings/{meetingId}");
     }
 }

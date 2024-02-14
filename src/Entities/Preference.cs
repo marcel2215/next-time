@@ -7,19 +7,24 @@ public sealed class Preference
     public Preference() { }
 
     [SetsRequiredMembers]
-    public Preference(Guid declarationId, DateTimeOffset suggestedTime)
+    public Preference(Guid meetingId, Guid userId, DateTimeOffset time)
     {
-        DeclarationId = declarationId;
-        SuggestedTime = suggestedTime;
+        MeetingId = meetingId;
+        UserId = userId;
+        PreferredTime = time;
     }
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required Guid DeclarationId { get; set; }
+    public required Guid MeetingId { get; set; }
 
-    public Declaration? Declaration { get; set; }
+    public Meeting? Meeting { get; set; }
+
+    public required Guid UserId { get; set; }
+
+    public ApplicationUser? User { get; set; }
 
     public DateTimeOffset CreationTime { get; init; } = DateTimeOffset.UtcNow;
 
-    public required DateTimeOffset SuggestedTime { get; set; }
+    public required DateTimeOffset PreferredTime { get; set; }
 }

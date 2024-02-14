@@ -1,11 +1,11 @@
-@page "/d/{declarationId}/add-suggestion"
+@page "/meetings/{meetingId}/edit-preferences"
 @inject NavigationManager NavigationManager
-@inject DeclarationManager DeclarationManager
+@inject MeetingManager MeetingManager
 @inject PreferenceManager PreferenceManager
 
-<PageTitle>NextTime - Edit My Preferences</PageTitle>
+<PageTitle>NextTime - Edit Preferences</PageTitle>
 
-@if (_declaration == null)
+@if (_meeting == null || User == null)
 {
     <LoadingScreen />
     return;
@@ -32,26 +32,29 @@
             }
         }
     </div>
-    <NTButton Clicked="LoadMoreDaysAsync">Load more days</NTButton>
-    <NTButton Style="ButtonStyle.Accent" Clicked="SaveSuggestionAsync">Save Suggestion</NTButton>
+    <NTButton Clicked="LoadMoreDaysAsync">Show more days</NTButton>
+    <NTButton Style="ButtonStyle.Accent" Clicked="SavePreferencesAsync">Save Preferences</NTButton>
 </div>
 
 @code {
-    private Declaration? _declaration;
+    private Meeting? _meeting;
 
     private List<SelectableDay> _selectableDays = [];
 
     [Parameter]
-    public string? DeclarationId { get; set; }
+    public string? MeetingId { get; set; }
+
+    [CascadingParameter]
+    public ApplicationUser? User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (Guid.TryParse(DeclarationId, out var declarationGuid))
+        if (Guid.TryParse(MeetingId, out var meetingGuid))
         {
-            _declaration = await DeclarationManager.FindByIdAsync(declarationGuid);
+            _meeting = await MeetingManager.FindByIdAsync(meetingGuid);
         }
 
-        if (_declaration == null)
+        if (_meeting == null)
         {
             NavigationManager.NavigateTo("/");
         }
@@ -68,54 +71,54 @@
             _selectableDays.Add(new SelectableDay(futureTime));
         }
 
-        await LoadSuggestionsAsync();
+        await LoadPreferencesAsync();
     }
 
-    private async Task LoadSuggestionsAsync()
+    private async Task LoadPreferencesAsync()
     {
-        if (_declaration == null)
+        if (_meeting == null || User == null)
         {
             return;
         }
 
-        await foreach (var preference in DeclarationManager.GetPreferences(_declaration).AsNoTracking().AsAsyncEnumerable())
+        await foreach (var preference in MeetingManager.GetPreferences(_meeting.Id, User.Id).AsNoTracking().AsAsyncEnumerable())
         {
-            var selectableDay = _selectableDays.FirstOrDefault(d => d.Time.Date == preference.SuggestedTime.Date);
+            var selectableDay = _selectableDays.FirstOrDefault(d => d.Time.Date == preference.PreferredTime.Date);
             if (selectableDay != null)
             {
                 var isAnySelected = false;
 
-                if (preference.SuggestedTime.Hour == 8)
+                if (preference.PreferredTime.Hour == 8)
                 {
                     selectableDay.Is8AMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (preference.SuggestedTime.Hour == 10)
+                if (preference.PreferredTime.Hour == 10)
                 {
                     selectableDay.Is10AMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (preference.SuggestedTime.Hour == 12)
+                if (preference.PreferredTime.Hour == 12)
                 {
                     selectableDay.Is12PMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (preference.SuggestedTime.Hour == 16)
+                if (preference.PreferredTime.Hour == 16)
                 {
                     selectableDay.Is4PMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (preference.SuggestedTime.Hour == 18)
+                if (preference.PreferredTime.Hour == 18)
                 {
                     selectableDay.Is6PMSelected = true;
                     isAnySelected = true;
                 }
 
-                if (preference.SuggestedTime.Hour == 20)
+                if (preference.PreferredTime.Hour == 20)
                 {
                     selectableDay.Is8PMSelected = true;
                     isAnySelected = true;
@@ -126,14 +129,12 @@
                     selectableDay.IsSelected = true;
                 }
             }
-
-            StateHasChanged();
         }
     }
 
-    private async Task SaveSuggestionAsync()
+    private async Task SavePreferencesAsync()
     {
-        if (_declaration == null)
+        if (_meeting == null || User == null)
         {
             return;
         }
@@ -143,44 +144,44 @@
         {
             if (selectableDay.Is8AMSelected)
             {
-                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(8));
+                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(8));
                 preferences.Add(preference);
             }
 
             if (selectableDay.Is10AMSelected)
             {
-                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(10));
+                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(10));
                 preferences.Add(preference);
             }
 
             if (selectableDay.Is12PMSelected)
             {
-                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(12));
+                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(12));
                 preferences.Add(preference);
             }
 
             if (selectableDay.Is4PMSelected)
             {
-                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(16));
+                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(16));
                 preferences.Add(preference);
             }
 
             if (selectableDay.Is6PMSelected)
             {
-                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(18));
+                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(18));
                 preferences.Add(preference);
             }
 
             if (selectableDay.Is8PMSelected)
             {
-                var preference = new Preference(_declaration.Id, selectableDay.Time.AddHours(20));
+                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(20));
                 preferences.Add(preference);
             }
         }
 
-        await DeclarationManager.DeletePreferencesAsync(_declaration);
+        await MeetingManager.DeletePreferencesAsync(_meeting.Id, User.Id);
         await PreferenceManager.CreateRangeAsync(preferences);
 
-        NavigationManager.NavigateTo($"/m/{_declaration.MeetingId}");
+        NavigationManager.NavigateTo($"/meetings/{MeetingId}");
     }
 }

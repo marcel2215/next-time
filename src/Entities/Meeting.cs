@@ -27,5 +27,5 @@ public sealed class Meeting
 
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
 
-    public ICollection<Declaration> Declarations { get; } = [];
+    public ICollection<Preference> Preferences { get; } = [];
 }

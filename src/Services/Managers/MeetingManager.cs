@@ -18,14 +18,14 @@ public sealed class MeetingManager(ApplicationDbContext context)
         return await context.Meetings.FindAsync(id);
     }
 
-    public IQueryable<Declaration> GetDeclarations(Meeting meeting)
+    public IQueryable<Preference> GetPreferences(Guid meetingId)
     {
-        return context.Declarations.Where(d => d.MeetingId == meeting.Id);
+        return context.Preferences.Where(p => p.MeetingId == meetingId);
     }
 
-    public async Task<Declaration?> GetDeclarationAsync(Meeting meeting, Guid userId)
+    public IQueryable<Preference> GetPreferences(Guid meetingId, Guid userId)
     {
-        return await context.Declarations.FirstOrDefaultAsync(d => d.MeetingId == meeting.Id && d.UserId == userId);
+        return context.Preferences.Where(p => p.MeetingId == meetingId && p.UserId == userId);
     }
 
     public async Task UpdateAsync(Meeting meeting)
@@ -38,5 +38,10 @@ public sealed class MeetingManager(ApplicationDbContext context)
     {
         context.Meetings.Remove(meeting);
         await context.SaveChangesAsync();
+    }
+
+    public async Task DeletePreferencesAsync(Guid meetingId, Guid userId)
+    {
+        await context.Preferences.Where(p => p.MeetingId == meetingId && p.UserId == userId).ExecuteDeleteAsync();
     }
 }
