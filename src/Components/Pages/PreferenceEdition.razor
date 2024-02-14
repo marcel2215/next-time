@@ -147,40 +147,52 @@
         var preferences = new List<Preference>();
         foreach (var selectableDay in _selectableDays.Where(d => d.IsSelected))
         {
+            var isAnySelected = false;
+
             if (selectableDay.Is8AMSelected)
             {
-                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(8));
-                preferences.Add(preference);
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(8)));
+                isAnySelected = true;
             }
 
             if (selectableDay.Is10AMSelected)
             {
-                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(10));
-                preferences.Add(preference);
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(10)));
+                isAnySelected = true;
             }
 
             if (selectableDay.Is12PMSelected)
             {
-                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(12));
-                preferences.Add(preference);
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(12)));
+                isAnySelected = true;
             }
 
             if (selectableDay.Is4PMSelected)
             {
-                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(16));
-                preferences.Add(preference);
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(16)));
+                isAnySelected = true;
             }
 
             if (selectableDay.Is6PMSelected)
             {
-                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(18));
-                preferences.Add(preference);
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(18)));
+                isAnySelected = true;
             }
 
             if (selectableDay.Is8PMSelected)
             {
-                var preference = new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(20));
-                preferences.Add(preference);
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(20)));
+                isAnySelected = true;
+            }
+
+            if (!isAnySelected)
+            {
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(8)));
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(10)));
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(12)));
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(16)));
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(18)));
+                preferences.Add(new Preference(_meeting.Id, User.Id, selectableDay.Time.AddHours(20)));
             }
         }
 
