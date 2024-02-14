@@ -1,0 +1,67 @@
+@inject MeetingManager MeetingManager
+
+@if (Meeting == null)
+{
+    <LoadingScreen />
+    return;
+}
+
+<div class="space-y-4">
+    <NTTextBox Label="Title" Placeholder="My Super Party" @bind-Text="Meeting.Title" />
+    <NTTextArea Label="Description" Placeholder="Here you can add more details about the event..." @bind-Text="Meeting.Description" />
+    <div>
+        <label class="pl-2 text-sm font-bold">Estimated Duration</label>
+        <div class="mt-1 space-y-2">
+            <NTCheckBox @bind-IsChecked="IsEstDuration1Hour">1 Hour</NTCheckBox>
+            <NTCheckBox @bind-IsChecked="IsEstDuration2To3Hours">2-3 Hours</NTCheckBox>
+            <NTCheckBox @bind-IsChecked="IsEstDuration4To6Hours">4-6 Hours</NTCheckBox>
+            <NTCheckBox @bind-IsChecked="IsEstDuration6To8Hours">6-8 Hours</NTCheckBox>
+            <NTCheckBox @bind-IsChecked="IsEstDuration8To12Hours">8-12 Hours</NTCheckBox>
+            <NTCheckBox @bind-IsChecked="IsEstDurationEntireDay">Entire Day</NTCheckBox>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Meeting? Meeting { get; set; }
+
+    [CascadingParameter]
+    public required ApplicationUser User { get; init; }
+
+    private bool IsEstDuration1Hour
+    {
+        get => Meeting!.Duration == TimeSpan.FromHours(1);
+        set => Meeting!.Duration = value ? TimeSpan.FromHours(1) : Meeting.Duration;
+    }
+
+    private bool IsEstDuration2To3Hours
+    {
+        get => Meeting!.Duration == TimeSpan.FromHours(3);
+        set => Meeting!.Duration = value ? TimeSpan.FromHours(3) : Meeting.Duration;
+    }
+
+    private bool IsEstDuration4To6Hours
+    {
+        get => Meeting!.Duration == TimeSpan.FromHours(6);
+        set => Meeting!.Duration = value ? TimeSpan.FromHours(6) : Meeting.Duration;
+    }
+
+    private bool IsEstDuration6To8Hours
+    {
+        get => Meeting!.Duration == TimeSpan.FromHours(8);
+        set => Meeting!.Duration = value ? TimeSpan.FromHours(8) : Meeting.Duration;
+    }
+
+    private bool IsEstDuration8To12Hours
+    {
+        get => Meeting!.Duration == TimeSpan.FromHours(12);
+        set => Meeting!.Duration = value ? TimeSpan.FromHours(12) : Meeting.Duration;
+    }
+
+    private bool IsEstDurationEntireDay
+    {
+        get => Meeting!.Duration == TimeSpan.FromDays(1);
+        set => Meeting!.Duration = value ? TimeSpan.FromDays(1) : Meeting.Duration;
+    }
+}

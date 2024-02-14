@@ -1,0 +1,73 @@
+@page "/m/{meetingCode}/edit"
+@inject NavigationManager NavigationManager
+@inject MeetingManager MeetingManager
+
+<PageTitle>NextTime - Edit Meeting</PageTitle>
+
+@if (_meeting == null || User == null)
+{
+    <LoadingScreen />
+    return;
+}
+
+@if (_meeting.UserId != User.Id)
+{
+    <div class="text-center">
+        <h1 class="text-2xl font-bold">Access Denied</h1>
+        <p>You do not have permission to edit this meeting.</p>
+    </div>
+    return;
+}
+
+<div class="space-y-4">
+    <h1 class="text-4xl font-bold">Edit Meeting</h1>
+    <MeetingEditor Meeting="_meeting" />
+    <div class="flex space-x-4">
+        <NTButton Clicked="NavigateToHomePage">Cancel</NTButton>
+        <NTButton Style="ButtonStyle.Accent" Clicked="SaveChangesAsync">Save</NTButton>
+    </div>
+</div>
+
+@code {
+    private Meeting? _meeting;
+
+    [Parameter]
+    public string? MeetingCode { get; set; }
+
+    [CascadingParameter]
+    public required ApplicationUser User { get; init; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (!string.IsNullOrWhiteSpace(MeetingCode) && MeetingCode.Length == 8)
+        {
+            _meeting = await MeetingManager.FindByCodeAsync(MeetingCode);
+        }
+
+        if (_meeting == null || User == null || _meeting.UserId != User.Id)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private void NavigateToHomePage()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private async Task SaveChangesAsync()
+    {
+        if (_meeting != null)
+        {
+            if (string.IsNullOrWhiteSpace(_meeting.Title))
+            {
+                _meeting.Title = "Untitled Meeting";
+            }
+
+            await MeetingManager.UpdateAsync(_meeting);
+            NavigationManager.NavigateTo($"/m/{_meeting.Code}");
+        }
+    }
+}
