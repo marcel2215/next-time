@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 
 namespace NextTime.Utilities;
 
-public static class UserNameGenerator
+public static class RandomGenerator
 {
     public static string GenerateUserName()
     {
