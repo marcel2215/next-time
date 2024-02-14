@@ -179,47 +179,28 @@ namespace NextTime.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Declarations",
+                name: "Preferences",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     MeetingId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreationTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    CreationTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    PreferredTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Declarations", x => x.Id);
+                    table.PrimaryKey("PK_Preferences", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Declarations_AspNetUsers_UserId",
+                        name: "FK_Preferences_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Declarations_Meetings_MeetingId",
+                        name: "FK_Preferences_Meetings_MeetingId",
                         column: x => x.MeetingId,
                         principalTable: "Meetings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Suggestions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DeclarationId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreationTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    SuggestedTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Suggestions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Suggestions_Declarations_DeclarationId",
-                        column: x => x.DeclarationId,
-                        principalTable: "Declarations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -262,24 +243,19 @@ namespace NextTime.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Declarations_MeetingId",
-                table: "Declarations",
-                column: "MeetingId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Declarations_UserId",
-                table: "Declarations",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Meetings_UserId",
                 table: "Meetings",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Suggestions_DeclarationId",
-                table: "Suggestions",
-                column: "DeclarationId");
+                name: "IX_Preferences_MeetingId",
+                table: "Preferences",
+                column: "MeetingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Preferences_UserId",
+                table: "Preferences",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -301,13 +277,10 @@ namespace NextTime.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Suggestions");
+                name: "Preferences");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Declarations");
 
             migrationBuilder.DropTable(
                 name: "Meetings");

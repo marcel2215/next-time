@@ -208,30 +208,6 @@ namespace NextTime.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("NextTime.Entities.Declaration", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("CreationTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("MeetingId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MeetingId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Declarations");
-                });
-
             modelBuilder.Entity("NextTime.Entities.Meeting", b =>
                 {
                     b.Property<Guid>("Id")
@@ -262,7 +238,7 @@ namespace NextTime.Migrations
                     b.ToTable("Meetings");
                 });
 
-            modelBuilder.Entity("NextTime.Entities.Suggestion", b =>
+            modelBuilder.Entity("NextTime.Entities.Preference", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -271,17 +247,22 @@ namespace NextTime.Migrations
                     b.Property<DateTimeOffset>("CreationTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("DeclarationId")
+                    b.Property<Guid>("MeetingId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("SuggestedTime")
+                    b.Property<DateTimeOffset>("PreferredTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeclarationId");
+                    b.HasIndex("MeetingId");
 
-                    b.ToTable("Suggestions");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Preferences");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -335,25 +316,6 @@ namespace NextTime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NextTime.Entities.Declaration", b =>
-                {
-                    b.HasOne("NextTime.Entities.Meeting", "Meeting")
-                        .WithMany("Declarations")
-                        .HasForeignKey("MeetingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NextTime.Entities.ApplicationUser", "User")
-                        .WithMany("Declarations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Meeting");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("NextTime.Entities.Meeting", b =>
                 {
                     b.HasOne("NextTime.Entities.ApplicationUser", "User")
@@ -365,32 +327,35 @@ namespace NextTime.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NextTime.Entities.Suggestion", b =>
+            modelBuilder.Entity("NextTime.Entities.Preference", b =>
                 {
-                    b.HasOne("NextTime.Entities.Declaration", "Declaration")
-                        .WithMany("Suggestions")
-                        .HasForeignKey("DeclarationId")
+                    b.HasOne("NextTime.Entities.Meeting", "Meeting")
+                        .WithMany("Preferences")
+                        .HasForeignKey("MeetingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Declaration");
+                    b.HasOne("NextTime.Entities.ApplicationUser", "User")
+                        .WithMany("Preferences")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NextTime.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Declarations");
-
                     b.Navigation("Meetings");
-                });
 
-            modelBuilder.Entity("NextTime.Entities.Declaration", b =>
-                {
-                    b.Navigation("Suggestions");
+                    b.Navigation("Preferences");
                 });
 
             modelBuilder.Entity("NextTime.Entities.Meeting", b =>
                 {
-                    b.Navigation("Declarations");
+                    b.Navigation("Preferences");
                 });
 #pragma warning restore 612, 618
         }
