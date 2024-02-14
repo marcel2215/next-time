@@ -12,12 +12,12 @@
     <div>
         <label class="pl-2 text-sm font-bold">Estimated Duration</label>
         <div class="mt-1 space-y-2">
-            <NTCheckBox @bind-IsChecked="IsEstDuration1Hour">1 Hour</NTCheckBox>
-            <NTCheckBox @bind-IsChecked="IsEstDuration2To3Hours">2-3 Hours</NTCheckBox>
-            <NTCheckBox @bind-IsChecked="IsEstDuration4To6Hours">4-6 Hours</NTCheckBox>
-            <NTCheckBox @bind-IsChecked="IsEstDuration6To8Hours">6-8 Hours</NTCheckBox>
-            <NTCheckBox @bind-IsChecked="IsEstDuration8To12Hours">8-12 Hours</NTCheckBox>
-            <NTCheckBox @bind-IsChecked="IsEstDurationEntireDay">Entire Day</NTCheckBox>
+            <NTToggleButton @bind-IsChecked="IsEstDuration1Hour">1 Hour</NTToggleButton>
+            <NTToggleButton @bind-IsChecked="IsEstDuration2To3Hours">2-3 Hours</NTToggleButton>
+            <NTToggleButton @bind-IsChecked="IsEstDuration4To6Hours">4-6 Hours</NTToggleButton>
+            <NTToggleButton @bind-IsChecked="IsEstDuration6To8Hours">6-8 Hours</NTToggleButton>
+            <NTToggleButton @bind-IsChecked="IsEstDuration8To12Hours">8-12 Hours</NTToggleButton>
+            <NTToggleButton @bind-IsChecked="IsEstDurationEntireDay">Entire Day</NTToggleButton>
         </div>
     </div>
 </div>

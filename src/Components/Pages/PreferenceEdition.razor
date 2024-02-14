@@ -19,16 +19,16 @@
     <div class="space-y-2">
         @foreach (var selectableDay in _selectableDays)
         {
-            <NTCheckBox @bind-IsChecked="selectableDay.IsSelected">@selectableDay.FriendlyDate</NTCheckBox>
+            <NTToggleButton @bind-IsChecked="selectableDay.IsSelected">@selectableDay.FriendlyDate</NTToggleButton>
             @if (selectableDay.IsSelected)
             {
                 <div class="flex space-x-1 text-xs sm:text-base">
-                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is8AMSelected">8:00</NTCheckBox>
-                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is10AMSelected">10:00</NTCheckBox>
-                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is12PMSelected">12:00</NTCheckBox>
-                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is4PMSelected">16:00</NTCheckBox>
-                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is6PMSelected">18:00</NTCheckBox>
-                    <NTCheckBox IsCompact="true" @bind-IsChecked="@selectableDay.Is8PMSelected">20:00</NTCheckBox>
+                    <NTToggleButton IsCompact="true" @bind-IsChecked="@selectableDay.Is8AMSelected">8:00</NTToggleButton>
+                    <NTToggleButton IsCompact="true" @bind-IsChecked="@selectableDay.Is10AMSelected">10:00</NTToggleButton>
+                    <NTToggleButton IsCompact="true" @bind-IsChecked="@selectableDay.Is12PMSelected">12:00</NTToggleButton>
+                    <NTToggleButton IsCompact="true" @bind-IsChecked="@selectableDay.Is4PMSelected">16:00</NTToggleButton>
+                    <NTToggleButton IsCompact="true" @bind-IsChecked="@selectableDay.Is6PMSelected">18:00</NTToggleButton>
+                    <NTToggleButton IsCompact="true" @bind-IsChecked="@selectableDay.Is8PMSelected">20:00</NTToggleButton>
                 </div>
                 <div class="w-full h-1 bg-gray-100 rounded-xl" />
             }
