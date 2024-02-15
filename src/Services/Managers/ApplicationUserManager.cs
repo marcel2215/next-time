@@ -65,6 +65,12 @@ public sealed class ApplicationUserManager(ApplicationDbContext context, UserMan
         }
     }
 
+    public async Task SetDisplayNameAsync(ApplicationUser user, string displayName)
+    {
+        user.DisplayName = displayName;
+        await UpdateAsync(user);
+    }
+
     public async Task AddToRoleAsync(ApplicationUser user, string role)
     {
         var result = await userManager.AddToRoleAsync(user, role);
