@@ -41,7 +41,7 @@
             <p class="text-center text-gray-500">You aren't participating in any meetings.</p>
         }
         <div class="space-y-2">
-            <NTTextBox Label="Meeting Code" Placeholder="/m/abcd1234" @bind-Text="MeetingCode" />
+            <NTTextBox Placeholder="https://nexttime.azurewebsites.net/m/abcd1234" @bind-Text="MeetingCode" />
             <NTButton Style="ButtonStyle.Accent" IsDisabled="ValidateMeetingCode() == null" Clicked="JoinMeetingAsync">Join Meeting</NTButton>
             @if (_joinMeetingError != null)
             {
