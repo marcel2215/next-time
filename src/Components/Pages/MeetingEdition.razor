@@ -13,9 +13,9 @@
 @if (_meeting.UserId != User.Id)
 {
     <div class="text-center">
-        <h1 class="text-2xl font-bold">Access Denied</h1>
-        <p>You do not have permission to edit this meeting.</p>
-    </div>
+    <h1 class="text-2xl font-bold">Access Denied</h1>
+    <p>You do not have permission to edit this meeting.</p>
+</div>
     return;
 }
 
@@ -23,7 +23,7 @@
     <h1 class="text-4xl font-bold">Edit Meeting</h1>
     <MeetingEditor Meeting="_meeting" />
     <div class="flex space-x-4">
-        <NTButton Clicked="NavigateToHomePage">Cancel</NTButton>
+        <NTButton Clicked="NavigateToDetails">Cancel</NTButton>
         <NTButton Style="ButtonStyle.Accent" Clicked="SaveChangesAsync">Save</NTButton>
     </div>
 </div>
@@ -52,9 +52,12 @@
         }
     }
 
-    private void NavigateToHomePage()
+    private void NavigateToDetails()
     {
-        NavigationManager.NavigateTo("/");
+        if (_meeting != null)
+        {
+            NavigationManager.NavigateTo($"/m/{_meeting.Code}");
+        }
     }
 
     private async Task SaveChangesAsync()
@@ -67,7 +70,7 @@
             }
 
             await MeetingManager.UpdateAsync(_meeting);
-            NavigationManager.NavigateTo($"/m/{_meeting.Code}");
+            NavigateToDetails();
         }
     }
 }
