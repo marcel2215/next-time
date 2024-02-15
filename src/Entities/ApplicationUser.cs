@@ -9,6 +9,8 @@ public sealed class ApplicationUser : IdentityUser<Guid>
 
     public ApplicationUser(string userName) : base(userName) { }
 
+    public string? DisplayName { get; set; }
+
     public ICollection<Meeting> Meetings { get; } = [];
 
     public ICollection<Preference> Preferences { get; } = [];
