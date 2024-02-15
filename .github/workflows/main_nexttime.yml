@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'nexttime'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CE6371D44B524D548AE4094B56D16FA3 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BE0763B6126349668DD3EB84BFA4DC99 }}
           package: .
