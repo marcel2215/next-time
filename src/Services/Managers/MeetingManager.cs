@@ -13,14 +13,18 @@ public sealed class MeetingManager(ApplicationDbContext context)
         await context.SaveChangesAsync();
     }
 
-    public async Task<Meeting?> FindByIdAsync(Guid id)
+    public async Task<Meeting?> FindByIdAsync(Guid id, bool asNoTracking = false)
     {
-        return await context.Meetings.FindAsync(id);
+        return asNoTracking
+            ? await context.Meetings.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id)
+            : await context.Meetings.FirstOrDefaultAsync(m => m.Id == id);
     }
 
-    public async Task<Meeting?> FindByCodeAsync(string code)
+    public async Task<Meeting?> FindByCodeAsync(string code, bool asNoTracking = false)
     {
-        return await context.Meetings.FirstOrDefaultAsync(m => m.Code == code);
+        return asNoTracking
+            ? await context.Meetings.AsNoTracking().FirstOrDefaultAsync(m => m.Code == code)
+            : await context.Meetings.FirstOrDefaultAsync(m => m.Code == code);
     }
 
     public IQueryable<Preference> GetPreferences(Guid meetingId)
