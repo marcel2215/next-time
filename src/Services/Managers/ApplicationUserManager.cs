@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NextTime.Constants;
 using NextTime.Entities;
 using NextTime.Exceptions;
@@ -36,6 +37,13 @@ public sealed class ApplicationUserManager(ApplicationDbContext context, UserMan
         return await userManager.GetUserAsync(principal);
     }
 
+    public async Task<ApplicationUser?> FindByIdAsync(Guid id, bool asNoTracking = false)
+    {
+        return asNoTracking
+            ? await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id)
+            : await userManager.FindByIdAsync(id.ToString());
+    }
+
     public IQueryable<Meeting> GetCreatedMeetings(ApplicationUser user)
     {
         return context.Meetings.Where(m => m.UserId == user.Id);
@@ -44,11 +52,6 @@ public sealed class ApplicationUserManager(ApplicationDbContext context, UserMan
     public IQueryable<Meeting> GetSharedMeetings(ApplicationUser user)
     {
         return context.Meetings.Where(m => m.UserId != user.Id && m.Preferences.Any(p => p.UserId == user.Id));
-    }
-
-    public async Task<ApplicationUser?> FindByIdAsync(Guid id)
-    {
-        return await userManager.FindByIdAsync(id.ToString());
     }
 
     public async Task<ApplicationUser?> FindByNameAsync(string userName)
