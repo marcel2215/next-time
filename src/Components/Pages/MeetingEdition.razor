@@ -43,7 +43,7 @@
 
         if (!string.IsNullOrWhiteSpace(MeetingCode) && MeetingCode.Length == 8)
         {
-            _meeting = await MeetingManager.FindByCodeAsync(MeetingCode);
+            _meeting = await MeetingManager.FindByCodeAsync(MeetingCode, asNoTracking: true);
         }
 
         if (_meeting == null || User == null || _meeting.UserId != User.Id)
