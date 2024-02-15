@@ -13,7 +13,7 @@
         <h1 class="text-4xl font-bold break-words">Let others know who you are!</h1>
         <p>Adding your name will help particpants understand when you are avaiable.</p>
     </div>
-    <NTTextBox Placeholder="John Smith" @bind-Text="User.DisplayName" />
+    <NTTextBox Placeholder="John Smith" @bind-Text="_displayName" />
     <div class="flex space-x-4">
         <NTButton Clicked="NavigateBack">Not Now</NTButton>
         <NTButton Style="ButtonStyle.Accent" Clicked="AddNameAsync">Add Name</NTButton>
@@ -22,6 +22,8 @@
 
 @code {
     private string? _redirectUrl;
+
+    private string _displayName = string.Empty;
 
     [CascadingParameter]
     public ApplicationUser? User { get; set; }
@@ -38,7 +40,10 @@
         if (User == null)
         {
             NavigateBack();
+            return;
         }
+
+        _displayName = User.DisplayName ?? string.Empty;
     }
 
     private void NavigateBack()
@@ -48,7 +53,11 @@
 
     private async Task AddNameAsync()
     {
-        await UserManager.UpdateAsync(User!);
+        if (!string.IsNullOrWhiteSpace(_displayName))
+        {
+            await UserManager.SetDisplayNameAsync(User!, _displayName);
+        }
+
         NavigateBack();
     }
 }
