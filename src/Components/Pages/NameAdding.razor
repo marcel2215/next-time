@@ -16,7 +16,7 @@
     <NTTextBox Placeholder="John Smith" @bind-Text="_displayName" />
     <div class="flex space-x-4">
         <NTButton Clicked="NavigateBack">Not Now</NTButton>
-        <NTButton Style="ButtonStyle.Accent" Clicked="AddNameAsync">Add Name</NTButton>
+        <NTButton Style="ButtonStyle.Accent" IsDisabled="string.IsNullOrWhiteSpace(_displayName)" Clicked="AddNameAsync">Add Name</NTButton>
     </div>
 </div>
 
