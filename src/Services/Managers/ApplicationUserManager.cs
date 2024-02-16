@@ -70,7 +70,7 @@ public sealed class ApplicationUserManager(ApplicationDbContext context, UserMan
 
     public async Task SetDisplayNameAsync(ApplicationUser user, string displayName)
     {
-        user.DisplayName = displayName;
+        user.DisplayName = displayName.Trim();
         await UpdateAsync(user);
     }
 
