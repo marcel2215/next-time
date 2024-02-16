@@ -199,7 +199,14 @@
         await MeetingManager.DeletePreferencesAsync(_meeting.Id, User.Id);
         await PreferenceManager.CreateRangeAsync(preferences);
 
-        NavigateToMeetingDetails();
+        if (string.IsNullOrWhiteSpace(User.DisplayName))
+        {
+            NavigationManager.NavigateTo($"/add-name?redirect-url=/m/{MeetingCode}");
+        }
+        else
+        {
+            NavigateToMeetingDetails();
+        }
     }
 
     void NavigateToMeetingDetails()
