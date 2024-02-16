@@ -21,10 +21,10 @@
 
 <div class="space-y-4">
     <h1 class="text-4xl font-bold">Edit Meeting</h1>
-    <MeetingEditor Meeting="_meeting" />
+    <MeetingEditor Meeting="_meeting" TitleChanged="StateHasChanged" />
     <div class="flex space-x-4">
         <NTButton Clicked="NavigateToDetails">Cancel</NTButton>
-        <NTButton Style="ButtonStyle.Accent" Clicked="SaveChangesAsync">Save</NTButton>
+        <NTButton Style="ButtonStyle.Accent" IsDisabled="string.IsNullOrWhiteSpace(_meeting.Title)" Clicked="SaveChangesAsync">Save</NTButton>
     </div>
 </div>
 

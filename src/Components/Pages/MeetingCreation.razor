@@ -6,10 +6,10 @@
 
 <div class="space-y-4">
     <h1 class="text-4xl font-bold">Create Meeting</h1>
-    <MeetingEditor Meeting="_meeting" />
+    <MeetingEditor Meeting="_meeting" TitleChanged="StateHasChanged" />
     <div class="flex space-x-4">
         <NTButton Clicked="NavigateToHomePage">Cancel</NTButton>
-        <NTButton Style="ButtonStyle.Accent" Clicked="CreateMeetingAsync">Create</NTButton>
+        <NTButton Style="ButtonStyle.Accent" IsDisabled="string.IsNullOrWhiteSpace(_meeting.Title)" Clicked="CreateMeetingAsync">Create</NTButton>
     </div>
 </div>
 
