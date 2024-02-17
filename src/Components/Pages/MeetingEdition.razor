@@ -128,7 +128,12 @@
         }
         else
         {
-            _meeting = new Meeting(User.Id, _title);
+            _meeting = new Meeting(User.Id, _title)
+                {
+                    Description = _description,
+                    Duration = _duration
+                };
+
             await MeetingManager.CreateAsync(_meeting);
         }
 
