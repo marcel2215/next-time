@@ -1,35 +1,41 @@
+@page "/new-meeting"
 @page "/m/{meetingCode}/edit"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
 
-<PageTitle>NextTime - Edit Meeting</PageTitle>
-
-@if (_meeting == null || User == null)
-{
-    <LoadingScreen />
-    return;
-}
-
-@if (_meeting.UserId != User.Id)
-{
-    <div class="text-center">
-    <h1 class="text-2xl font-bold">Access Denied</h1>
-    <p>You do not have permission to edit this meeting.</p>
-</div>
-    return;
-}
+<PageTitle>NextTime - @(_meeting != null ? "Edit Meeting" : "Create Meeting")</PageTitle>
 
 <div class="space-y-4">
-    <h1 class="text-4xl font-bold">Edit Meeting</h1>
-    <MeetingEditor Meeting="_meeting" TitleChanged="StateHasChanged" />
+    <h1 class="text-4xl font-bold">@(_meeting != null ? "Edit Meeting" : "Create Meeting")</h1>
+    <div class="space-y-4">
+        <NTTextBox Label="Title" Placeholder="My Super Party" @bind-Text="_title" />
+        <NTTextArea Label="Description" Placeholder="Here you can add more details about the event..." @bind-Text="_description" />
+        <div>
+            <label class="pl-2 text-sm font-bold">Estimated Duration</label>
+            <div class="mt-1 space-y-2">
+                <NTToggleButton @bind-IsChecked="IsEstDuration1Hour">1 Hour</NTToggleButton>
+                <NTToggleButton @bind-IsChecked="IsEstDuration2To3Hours">2-3 Hours</NTToggleButton>
+                <NTToggleButton @bind-IsChecked="IsEstDuration4To6Hours">4-6 Hours</NTToggleButton>
+                <NTToggleButton @bind-IsChecked="IsEstDuration6To8Hours">6-8 Hours</NTToggleButton>
+                <NTToggleButton @bind-IsChecked="IsEstDuration8To12Hours">8-12 Hours</NTToggleButton>
+                <NTToggleButton @bind-IsChecked="IsEstDurationEntireDay">Entire Day</NTToggleButton>
+            </div>
+        </div>
+    </div>
     <div class="flex space-x-4">
-        <NTButton Clicked="NavigateToDetails">Cancel</NTButton>
-        <NTButton Style="ButtonStyle.Accent" IsDisabled="string.IsNullOrWhiteSpace(_meeting.Title)" Clicked="SaveChangesAsync">Save</NTButton>
+        <NTButton Clicked="NavigateBack">Cancel</NTButton>
+        <NTButton Style="ButtonStyle.Accent" IsDisabled="string.IsNullOrWhiteSpace(_title)" Clicked="SaveOrCreateAsync">@(_meeting != null ? "Save" : "Create")</NTButton>
     </div>
 </div>
 
 @code {
     private Meeting? _meeting;
+
+    private string _title = string.Empty;
+
+    private string _description = string.Empty;
+
+    private TimeSpan _duration = TimeSpan.FromHours(1);
 
     [Parameter]
     public string? MeetingCode { get; set; }
@@ -37,40 +43,95 @@
     [CascadingParameter]
     public required ApplicationUser User { get; init; }
 
+    private bool IsEstDuration1Hour
+    {
+        get => _duration == TimeSpan.FromHours(1);
+        set => _duration = value ? TimeSpan.FromHours(1) : _duration;
+    }
+
+    private bool IsEstDuration2To3Hours
+    {
+        get => _duration == TimeSpan.FromHours(3);
+        set => _duration = value ? TimeSpan.FromHours(3) : _duration;
+    }
+
+    private bool IsEstDuration4To6Hours
+    {
+        get => _duration == TimeSpan.FromHours(6);
+        set => _duration = value ? TimeSpan.FromHours(6) : _duration;
+    }
+
+    private bool IsEstDuration6To8Hours
+    {
+        get => _duration == TimeSpan.FromHours(8);
+        set => _duration = value ? TimeSpan.FromHours(8) : _duration;
+    }
+
+    private bool IsEstDuration8To12Hours
+    {
+        get => _duration == TimeSpan.FromHours(12);
+        set => _duration = value ? TimeSpan.FromHours(12) : _duration;
+    }
+
+    private bool IsEstDurationEntireDay
+    {
+        get => _duration == TimeSpan.FromDays(1);
+        set => _duration = value ? TimeSpan.FromDays(1) : _duration;
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
         if (!string.IsNullOrWhiteSpace(MeetingCode) && MeetingCode.Length == 8)
         {
-            _meeting = await MeetingManager.FindByCodeAsync(MeetingCode, asNoTracking: true);
+            _meeting = await MeetingManager.FindByCodeAsync(MeetingCode);
         }
 
-        if (_meeting == null || User == null || _meeting.UserId != User.Id)
+        if (_meeting != null)
         {
-            NavigationManager.NavigateTo("/");
+            _title = _meeting.Title;
+            _description = _meeting.Description;
+            _duration = _meeting.Duration;
+
+            if (_meeting.UserId != User.Id)
+            {
+                NavigationManager.NavigateTo("/");
+            }
         }
     }
 
-    private void NavigateToDetails()
+    private void NavigateBack()
     {
         if (_meeting != null)
         {
             NavigationManager.NavigateTo($"/m/{_meeting.Code}");
         }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
-    private async Task SaveChangesAsync()
+    private async Task SaveOrCreateAsync()
     {
         if (_meeting != null)
         {
-            if (string.IsNullOrWhiteSpace(_meeting.Title))
+            if (_meeting.UserId == User.Id)
             {
-                _meeting.Title = "Untitled Meeting";
-            }
+                _meeting.Title = _title;
+                _meeting.Description = _description;
+                _meeting.Duration = _duration;
 
-            await MeetingManager.UpdateAsync(_meeting);
-            NavigateToDetails();
+                await MeetingManager.UpdateAsync(_meeting);
+            }
         }
+        else
+        {
+            _meeting = new Meeting(User.Id, _title);
+            await MeetingManager.CreateAsync(_meeting);
+        }
+
+        NavigateBack();
     }
 }

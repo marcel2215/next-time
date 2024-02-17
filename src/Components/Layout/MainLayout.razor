@@ -4,9 +4,13 @@
 
 <main class="flex bg-gray-100 min-h-screen min-w-screen justify-center items-center">
     <article class="flex flex-col min-h-screen w-full sm:max-w-screen-sm p-8 sm:p-12 bg-white">
-        <CascadingValue Value="_user">
-            @Body
-        </CascadingValue>
+        <AuthorizeView>
+            <Authorized>
+                <CascadingValue Value="_user">
+                    @Body
+                </CascadingValue>
+            </Authorized>
+        </AuthorizeView>
     </article>
 </main>
 
@@ -16,6 +20,6 @@
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        _user = await UserManager.GetAsync(state.User) ?? throw new Exception("Authentication failed.");
+        _user = await UserManager.GetAsync(state.User);
     }
 }
