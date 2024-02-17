@@ -1,6 +1,7 @@
 @page "/m/{meetingCode}"
 @inject NavigationManager NavigationManager
 @inject MeetingManager MeetingManager
+@inject PreferenceManager PreferencesManager
 @inject IJSRuntime JSRuntime
 
 @if (_meeting == null || User == null)
@@ -47,10 +48,22 @@
     <div class="py-4">
         <div class="w-full h-1 bg-gray-100 rounded-xl" />
     </div>
-    @if (_hasAnyPreferences && _recommendedTime != null)
+    @if (_allParticipantCount >= 1 && _recommendedTime != null)
     {
         <h3 class="text-center text-gray-500 font-bold">RECOMMENDED TIME</h3>
         <p class="text-center text-2xl font-bold">@_recommendedTime.Value.ToString("dddd, dd MMMM HH:mm")</p>
+        @if (_allParticipantCount == 1)
+        {
+            <p>Only one participant added their preferences.</p>
+        }
+        else if (_attendingParticipantCount == _allParticipantCount)
+        {
+            <p>All @_allParticipantCount participant can take part in the event this time.</p>
+        }
+        else
+        {
+            <p>@_attendingParticipantCount of @_allParticipantCount participants can take part in the event this time.</p>
+        }
     }
     else
     {
@@ -89,7 +102,9 @@
 
     private DateTimeOffset? _recommendedTime;
 
-    private bool _hasAnyPreferences;
+    private int _allParticipantCount;
+
+    private int _attendingParticipantCount;
 
     private bool _hasUserAnyPreferences;
 
@@ -112,10 +127,10 @@
             return;
         }
 
-        _hasAnyPreferences = await MeetingManager.GetPreferences(_meeting.Id).AnyAsync();
+        _allParticipantCount = await MeetingManager.GetPreferences(_meeting.Id).GroupBy(p => p.UserId).CountAsync();
         _hasUserAnyPreferences = await MeetingManager.GetPreferences(_meeting.Id, User.Id).AnyAsync();
 
-        if (_hasAnyPreferences)
+        if (_allParticipantCount >= 1)
         {
             _recommendedTime = await MeetingManager
             .GetPreferences(_meeting.Id)
@@ -124,6 +139,8 @@
             .OrderByDescending(g => g.Count())
             .Select(g => g.Key)
             .FirstOrDefaultAsync();
+
+            _attendingParticipantCount = await MeetingManager.GetPreferences(_meeting.Id).CountAsync(p => p.PreferredTime == _recommendedTime);
         }
     }
 
