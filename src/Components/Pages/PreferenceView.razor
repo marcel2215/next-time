@@ -1,0 +1,81 @@
+@page "/m/{meetingCode}/p/{participantId}"
+@inject NavigationManager NavigationManager
+@inject ApplicationUserManager UserManager
+@inject MeetingManager MeetingManager
+
+@if (_participant == null || _preferences == null)
+{
+    <PageTitle>NextTime - User Preferences</PageTitle>
+    <LoadingScreen />
+    return;
+}
+
+<PageTitle>NextTime - Preferences of @_participant.DisplayName</PageTitle>
+
+<div class="space-y-8">
+    <div class="space-y-4">
+        <h1 class="text-4xl font-bold break-words">Preferences of @_participant.DisplayName </h1>
+    </div>
+    <div class="space-y-4">
+        @foreach (var day in _preferences.OrderBy(p => p.PreferredTime).GroupBy(p => p.PreferredTime.Date))
+        {
+            <p><b>@day.Key.ToString("dddd, dd MMMM")</b></p>
+            <div class="space-y-2">
+            @foreach (var hour in day.OrderBy(p => p.PreferredTime))
+                {
+                    <p>@hour.PreferredTime.ToString("HH:mm")</p>
+                }
+            </div>
+        }
+
+    </div>
+    <NTButton Clicked="GoBack">Go Back</NTButton>
+</div>
+
+@code {
+    private Meeting? _meeting;
+
+    private ApplicationUser? _participant;
+
+    private List<Preference>? _preferences;
+
+    [Parameter]
+    public string? MeetingCode { get; set; }
+
+    [Parameter]
+    public string? ParticipantId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (!string.IsNullOrEmpty(MeetingCode) && !string.IsNullOrWhiteSpace(ParticipantId) && Guid.TryParse(ParticipantId, out var participantGuid))
+        {
+            _meeting = await MeetingManager.FindByCodeAsync(MeetingCode);
+
+            if (_meeting != null)
+            {
+                _participant = await UserManager.FindByIdAsync(participantGuid);
+                _preferences = await MeetingManager.GetPreferences(_meeting.Id, participantGuid).ToListAsync();
+            }
+        }
+
+        if (_participant == null || _preferences == null)
+        {
+            GoBack();
+            return;
+        }
+    }
+
+    private void GoBack()
+    {
+        if (_meeting != null)
+        {
+            NavigationManager.NavigateTo($"/m/{_meeting.Code}");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}
