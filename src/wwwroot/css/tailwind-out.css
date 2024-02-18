@@ -863,6 +863,10 @@ video {
   background-color: rgb(250 250 250 / var(--tw-bg-opacity));
 }
 
+.hover\:p-0:hover {
+  padding: 0px;
+}
+
 .hover\:text-amber-700:hover {
   --tw-text-opacity: 1;
   color: rgb(180 83 9 / var(--tw-text-opacity));
