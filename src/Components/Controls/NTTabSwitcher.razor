@@ -1,7 +1,7 @@
 <div>
     <div class="flex justify-around p-1 bg-gray-100 rounded-xl border shadow-sm font-bold space-x-1">
-        <button class="@GetButtonClass(IsOnSecondaryTab)" @onclick="SwitchTabAsync">@PrimaryTabTitle</button>
-        <button class="@GetButtonClass(!IsOnSecondaryTab)" @onclick="SwitchTabAsync">@SecondaryTabTitle</button>
+        <button class="@GetButtonClass(!IsOnSecondaryTab)" @onclick="SwitchTabAsync">@PrimaryTabTitle</button>
+        <button class="@GetButtonClass(IsOnSecondaryTab)" @onclick="SwitchTabAsync">@SecondaryTabTitle</button>
     </div>
 </div>
 
