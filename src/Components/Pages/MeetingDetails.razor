@@ -48,21 +48,21 @@
     <div class="py-4">
         <div class="w-full h-1 bg-gray-100 rounded-xl" />
     </div>
-    @if (_numberOfAllUsers >= 1 && _recommendedTime != null)
+    @if (_allParticipants.Count >= 1 && _recommendedTime != null)
     {
         <h3 class="text-center text-gray-500 font-bold">RECOMMENDED TIME</h3>
         <p class="text-center text-2xl font-bold">@_recommendedTime.Value.ToString("dddd, dd MMMM HH:mm")</p>
-        @if (_numberOfAllUsers == 1)
+        @if (_allParticipants.Count == 1)
         {
             <p>Only one participant added their preferences.</p>
         }
-        else if (_numberOfMatchedUsers == _numberOfAllUsers)
+        else if (_matchedParticipants.Count == _allParticipants.Count)
         {
-            <p>All @_numberOfAllUsers participant can take part in the event this time.</p>
+            <p>All @_matchedParticipants.Count participant can take part in the event this time.</p>
         }
         else
         {
-            <p>@_numberOfMatchedUsers of @_numberOfAllUsers participants can take part in the event this time.</p>
+            <p>@_matchedParticipants.Count of @_allParticipants.Count participants can take part in the event this time.</p>
         }
     }
     else
@@ -70,17 +70,19 @@
         <p>No one has suggested a time for this event yet.</p>
     }
     <div class="pt-4">
-        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToPreferenceEdition">
-            @if (_hasUserAnyPreferences)
-            {
-                <span>Edit My Preferences</span>
-            }
-            else
-            {
-                <span>Add My Preferences</span>
-            }
-        </NTButton>
+        <NTButton Style="ButtonStyle.Accent" Clicked="NavigateToPreferenceEdition">Edit My Preferences</NTButton>
     </div>
+    @if (_allParticipants.Count >= 1)
+    {
+        <div class="py-4">
+            <div class="w-full h-1 bg-gray-100 rounded-xl" />
+        </div>
+        <NTTabSwitcher PrimaryTabTitle="Will Come" SecondaryTabTitle="Won't Come" @bind-IsOnSecondaryTab="_isShowingMismatchedParticipants" />
+        @foreach (var participant in _isShowingMismatchedParticipants ? _mismatchedParticipants : _matchedParticipants)
+        {
+            <p><a href="/m/@_meeting.Code/p/@participant.Id">@participant.DisplayName</a></p>
+        }
+    }
     <div class="py-4">
         <div class="w-full h-1 bg-gray-100 rounded-xl" />
     </div>
@@ -90,6 +92,7 @@
     </div>
     @if (User.Id == _meeting.UserId)
     {
+
         <div class="flex space-x-4">
             <NTButton Clicked="NavigateToEdition">Edit</NTButton>
             <NTButton Style="ButtonStyle.Danger" Clicked="NavigateToDeletion">Delete</NTButton>
@@ -102,11 +105,13 @@
 
     private DateTimeOffset? _recommendedTime;
 
-    private int _numberOfAllUsers;
+    private List<ApplicationUser> _allParticipants = [];
 
-    private int _numberOfMatchedUsers;
+    private List<ApplicationUser> _matchedParticipants = [];
 
-    private bool _hasUserAnyPreferences;
+    private List<ApplicationUser> _mismatchedParticipants = [];
+
+    private bool _isShowingMismatchedParticipants;
 
     [Parameter]
     public string? MeetingCode { get; set; }
@@ -127,10 +132,12 @@
             return;
         }
 
-        _numberOfAllUsers = await MeetingManager.GetPreferences(_meeting.Id).GroupBy(p => p.UserId).CountAsync();
-        _hasUserAnyPreferences = await MeetingManager.GetPreferences(_meeting.Id, User.Id).AnyAsync();
+        _allParticipants = await MeetingManager
+        .GetParticipants(_meeting.Id)
+        .AsNoTracking()
+        .ToListAsync();
 
-        if (_numberOfAllUsers >= 1)
+        if (_allParticipants.Count >= 1)
         {
             _recommendedTime = await MeetingManager
             .GetPreferences(_meeting.Id)
@@ -140,7 +147,16 @@
             .Select(g => g.Key)
             .FirstOrDefaultAsync();
 
-            _numberOfMatchedUsers = await MeetingManager.GetPreferences(_meeting.Id).CountAsync(p => p.PreferredTime == _recommendedTime);
+            _matchedParticipants = await MeetingManager
+            .GetPreferences(_meeting.Id)
+            .AsNoTracking()
+            .Where(p => p.PreferredTime == _recommendedTime)
+            .Include(p => p.User!)
+            .Select(p => p.User!)
+            .Distinct()
+            .ToListAsync();
+
+            _mismatchedParticipants = _allParticipants.Where(p => !_matchedParticipants.Any(p2 => p.Id == p2.Id)).ToList();
         }
     }
 

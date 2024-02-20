@@ -27,6 +27,11 @@ public sealed class MeetingManager(ApplicationDbContext context)
             : await context.Meetings.FirstOrDefaultAsync(m => m.Code == code);
     }
 
+    public IQueryable<ApplicationUser> GetParticipants(Guid meetingId)
+    {
+        return context.Preferences.Where(p => p.MeetingId == meetingId).Include(p => p.User!).Select(p => p.User!).Distinct();
+    }
+
     public IQueryable<Preference> GetPreferences(Guid meetingId)
     {
         return context.Preferences.Where(p => p.MeetingId == meetingId);
